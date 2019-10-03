@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">LEEV Frequency</string>
+    <string name="app_font">casual</string>
+
+    <string name="open_drawer">Abrir</string>
+    <string name="close_drawer">Fechar</string>
+</resources>
