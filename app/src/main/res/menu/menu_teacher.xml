@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group>
+        <item
+            android:id="@+id/nav_my_profile"
+            android:title="Meu perfil"/>
+        <item
+            android:id="@+id/nav_my_students"
+            android:title="Meus alunos"/>
+        <item
+            android:id="@+id/nav_user_register"
+            android:title="Cadastrar usuário"/>
+        <item
+            android:id="@+id/nav_leev_students"
+            android:title="Alunos do LEEV"/>
+        <item
+            android:id="@+id/nav_leev_teachers"
+            android:title="Professores do LEEV"/>
+        <item
+            android:id="@+id/nav_logout"
+            android:title="Sair"/>
+    </group>
+</menu>
+

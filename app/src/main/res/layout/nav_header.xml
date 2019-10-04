@@ -23,7 +23,7 @@
         android:layout_height="wrap_content"
         android:gravity="center">
         <TextView
-            android:id="@+id/nav_header_nome"
+            android:id="@+id/nav_header_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingTop="16dp"
@@ -37,7 +37,7 @@
         android:layout_height="wrap_content"
         android:gravity="center">
         <TextView
-            android:id="@+id/nav_header_cargo"
+            android:id="@+id/nav_header_email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingTop="16dp"

@@ -4,4 +4,9 @@
 
     <string name="open_drawer">Abrir</string>
     <string name="close_drawer">Fechar</string>
+
+    <string-array name="user_types">
+        <item>Aluno</item>
+        <item>Professor</item>
+    </string-array>
 </resources>

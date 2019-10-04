@@ -8,8 +8,8 @@ public class User {
     private String projects;
     private Boolean isVisible;
     private int userType;
-    private Boolean isFinalizedRegister;
-    private String idTeacher;
+    private Boolean isRegisterFinalized;
+    private String idAdvisor;
 
     public String getId() {
         return id;
@@ -27,6 +27,14 @@ public class User {
         this.name = name;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     public String getProjects() {
         return projects;
     }
@@ -40,7 +48,7 @@ public class User {
     }
 
     public void setVisible(Boolean visible) {
-        this.isVisible = visible;
+        isVisible = visible;
     }
 
     public int getUserType() {
@@ -51,27 +59,19 @@ public class User {
         this.userType = userType;
     }
 
-    public Boolean getFinalizedRegister() {
-        return isFinalizedRegister;
+    public Boolean getRegisterFinalized() {
+        return isRegisterFinalized;
     }
 
-    public void setFinalizedRegister(Boolean finalizedRegister) {
-        this.isFinalizedRegister = finalizedRegister;
+    public void setRegisterFinalized(Boolean registerFinalized) {
+        isRegisterFinalized = registerFinalized;
     }
 
-    public String getIdTeacher() {
-        return idTeacher;
+    public String getIdAdvisor() {
+        return idAdvisor;
     }
 
-    public void setIdTeacher(String idTeacher) {
-        this.idTeacher = idTeacher;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
+    public void setIdAdvisor(String idAdvisor) {
+        this.idAdvisor = idAdvisor;
     }
 }

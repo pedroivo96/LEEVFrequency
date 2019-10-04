@@ -10,5 +10,15 @@ public class ConstantUtils {
 
     public static final String DATABASE_ACTUAL_BRANCH = DEVELOPMENT_BRANCH;
 
+    public static final String USER_FIELD_ID = "id";
+    public static final String USER_FIELD_EMAIL = "email";
+    public static final String USER_FIELD_NAME = "name";
+    public static final String USER_FIELD_PROJECTS = "projects";
+    public static final String USER_FIELD_USERTYPE = "userType";
+    public static final String USER_FIELD_REGISTERFINALIZED = "isRegisterFinalized";
+    public static final String USER_FIELD_VISIBLE = "isVisible";
+    public static final String USER_FIELD_IDADVISOR = "idAdvisor";
+
+    public static final String USERS_BRANCH = "users";
 
 }

@@ -47,7 +47,9 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         mAuth = FirebaseAuth.getInstance();
-        mDatabase = FirebaseDatabase.getInstance().getReference().child(ConstantUtils.DATABASE_ACTUAL_BRANCH).child("users");
+        mDatabase = FirebaseDatabase.getInstance().getReference()
+                .child(ConstantUtils.DATABASE_ACTUAL_BRANCH)
+                .child(ConstantUtils.USERS_BRANCH);
 
         eEmail = findViewById(R.id.eEmail);
         ePassword = findViewById(R.id.ePassword);
@@ -102,7 +104,7 @@ public class LoginActivity extends AppCompatActivity {
                     Toast.makeText(getContext(), "Login com sucesso!", Toast.LENGTH_SHORT).show();
 
                     //Agora, buscamos as informações referentes a este Usuário
-                    mDatabase.orderByChild("email").equalTo(eEmail.getText().toString()).addValueEventListener(new ValueEventListener() {
+                    mDatabase.orderByChild(ConstantUtils.USER_FIELD_EMAIL).equalTo(eEmail.getText().toString()).addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
@@ -110,12 +112,16 @@ public class LoginActivity extends AppCompatActivity {
                                 for(DataSnapshot d : dataSnapshot.getChildren()){
 
                                     //Iremos salvar nas preferences apenas email e id
-                                    String email = (String) d.child("email").getValue();
+                                    String email = (String) d.child(ConstantUtils.USER_FIELD_EMAIL).getValue();
                                     String id = d.getKey();
+                                    String name = (String) d.child(ConstantUtils.USER_FIELD_NAME).getValue();
+                                    int userType = d.child(ConstantUtils.USER_FIELD_USERTYPE).getValue(Integer.class);
 
                                     prefs = getSharedPreferences("com.ufpi.leevfrequency", MODE_PRIVATE);
-                                    prefs.edit().putString("email", email).commit();
-                                    prefs.edit().putString("id", id).commit();
+                                    prefs.edit().putString(ConstantUtils.USER_FIELD_EMAIL, email).commit();
+                                    prefs.edit().putString(ConstantUtils.USER_FIELD_NAME, name).commit();
+                                    prefs.edit().putString(ConstantUtils.USER_FIELD_ID, id).commit();
+                                    prefs.edit().putInt(ConstantUtils.USER_FIELD_USERTYPE, userType).commit();
 
                                     Intent intent = new Intent(getContext(), UserActivity.class);
                                     startActivity(intent);

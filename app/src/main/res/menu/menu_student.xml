@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group>
+        <item
+            android:id="@+id/nav_my_profile"
+            android:title="Meu perfil"/>
+        <item
+            android:id="@+id/nav_my_frequencies"
+            android:title="Minhas frequências"/>
+        <item
+            android:id="@+id/nav_see_advisor"
+            android:title="Ver orientador"/>
+        <item
+            android:id="@+id/nav_leev_teachers"
+            android:title="Professores LEEV"/>
+        <item
+            android:id="@+id/nav_leev_students"
+            android:title="Alunos LEEV"/>
+        <item
+            android:id="@+id/nav_logout"
+            android:title="Sair"/>
+    </group>
+</menu>
+

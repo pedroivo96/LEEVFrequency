@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".View.RegisterStudentActivity">
+    tools:context=".View.UserRegisterActivity">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -19,15 +19,23 @@
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/eStudentName"/>
+                android:hint="Digite o nome do usuário"
+                android:id="@+id/eUserName"/>
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/eStudentEmail"/>
+                android:hint="Digite o email do usuário"
+                android:id="@+id/eUserEmail"/>
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/eStudentProject"/>
+                android:hint="Digite as áreas ou projeto do usuário"
+                android:id="@+id/eUserProjects"/>
+            <Spinner
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/spinner_background"
+                android:id="@+id/spUserType"/>
 
             <Button
                 android:layout_width="match_parent"
