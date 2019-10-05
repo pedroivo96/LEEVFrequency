@@ -10,6 +10,9 @@ public class ConstantUtils {
 
     public static final String DATABASE_ACTUAL_BRANCH = DEVELOPMENT_BRANCH;
 
+    public static final String USERS_BRANCH = "users";
+    public static final String FREQUENCIES_BRANCH = "frequencies";
+
     public static final String USER_FIELD_ID = "id";
     public static final String USER_FIELD_EMAIL = "email";
     public static final String USER_FIELD_NAME = "name";
@@ -19,6 +22,6 @@ public class ConstantUtils {
     public static final String USER_FIELD_VISIBLE = "isVisible";
     public static final String USER_FIELD_IDADVISOR = "idAdvisor";
 
-    public static final String USERS_BRANCH = "users";
+    public static final String FREQUENCY_FIELD_DATE = "date";
 
 }
