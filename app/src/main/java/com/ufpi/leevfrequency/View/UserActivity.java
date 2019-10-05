@@ -1,6 +1,8 @@
 package com.ufpi.leevfrequency.View;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -11,8 +13,10 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.support.v7.widget.Toolbar;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
@@ -31,6 +35,11 @@ public class UserActivity extends AppCompatActivity {
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
 
+    private TextView tUserId;
+    private TextView tUserName;
+    private TextView tUserEmail;
+    private TextView tUserProjects;
+
     private SharedPreferences prefs = null;
 
     private DatabaseReference mDatabase;
@@ -42,7 +51,18 @@ public class UserActivity extends AppCompatActivity {
 
         prefs = getSharedPreferences("com.ufpi.leevfrequency", MODE_PRIVATE);
 
-        mDatabase = FirebaseDatabase.getInstance().getReference().child(ConstantUtils.DATABASE_ACTUAL_BRANCH).child(ConstantUtils.USERS_BRANCH);
+        mDatabase = FirebaseDatabase.getInstance().getReference()
+                .child(ConstantUtils.DATABASE_ACTUAL_BRANCH)
+                .child(ConstantUtils.USERS_BRANCH);
+
+        tUserId = findViewById(R.id.tUserId);
+        tUserName = findViewById(R.id.tUserName);
+        tUserEmail = findViewById(R.id.tUserEmail);
+        tUserProjects = findViewById(R.id.tUserProjects);
+
+        /* Método responsável por configurar os eventos de edição de informações do usuário ao apertar
+        * e segurar cada TextView */
+        setUpdateUserInformationEvents();
 
         //----------------------------Configure NavigationDrawer------------------------------------
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
@@ -87,14 +107,17 @@ public class UserActivity extends AppCompatActivity {
             navigationView.inflateMenu(R.menu.menu_teacher);
         }
 
+        //Configura o evento de seleção de algum item do menu do DrawerLayout
+        navigationView.setNavigationItemSelectedListener(
+                NavigationDrawerUtils.getNavigationDrawerItemSelectedListener(getContext(),
+                        prefs.getInt(ConstantUtils.USER_FIELD_USERTYPE,-1), drawerLayout));
+
+        //Busca as informação do usuário logado para exibí-las nessa tela
         mDatabase
                 .orderByChild(ConstantUtils.USER_FIELD_EMAIL)
                 .equalTo(prefs.getString(ConstantUtils.USER_FIELD_EMAIL,""))
                 .addValueEventListener(getUserInformationListener());
 
-        navigationView.setNavigationItemSelectedListener(
-                NavigationDrawerUtils.getNavigationDrawerItemSelectedListener(getContext(),
-                        prefs.getInt(ConstantUtils.USER_FIELD_USERTYPE,-1), drawerLayout));
     }
 
     private Context getContext(){
@@ -105,7 +128,14 @@ public class UserActivity extends AppCompatActivity {
         return new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
+                if(dataSnapshot.exists()){
+                    for(DataSnapshot d : dataSnapshot.getChildren()){
+                        tUserId.setText(d.getKey());
+                        tUserName.setText((String) d.child(ConstantUtils.USER_FIELD_NAME).getValue());
+                        tUserEmail.setText((String) d.child(ConstantUtils.USER_FIELD_EMAIL).getValue());
+                        tUserProjects.setText((String) d.child(ConstantUtils.USER_FIELD_PROJECTS).getValue());
+                    }
+                }
             }
 
             @Override
@@ -113,5 +143,87 @@ public class UserActivity extends AppCompatActivity {
 
             }
         };
+    }
+
+    private void setUpdateUserInformationEvents(){
+        tUserName.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+
+                String updateInformation = createAndShowInputDialog();
+
+                mDatabase
+                        .child(prefs.getString(ConstantUtils.USER_FIELD_ID,""))
+                        .child(ConstantUtils.USER_FIELD_NAME).setValue(updateInformation);
+                return true;
+            }
+        });
+
+        tUserEmail.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+
+                String updateInformation = createAndShowInputDialog();
+
+                mDatabase
+                        .child(prefs.getString(ConstantUtils.USER_FIELD_ID,""))
+                        .child(ConstantUtils.USER_FIELD_EMAIL).setValue(updateInformation);
+                return true;
+            }
+        });
+
+        tUserProjects.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+
+                String updateInformation = createAndShowInputDialog();
+
+                mDatabase
+                        .child(prefs.getString(ConstantUtils.USER_FIELD_ID,""))
+                        .child(ConstantUtils.USER_FIELD_PROJECTS).setValue(updateInformation);
+                return true;
+            }
+        });
+    }
+
+    private String createAndShowInputDialog(){
+        final String[] updateData = new String[1];
+
+        // get prompts.xml view
+        LayoutInflater li = LayoutInflater.from(getContext());
+        View promptsView = li.inflate(R.layout.input_dialog, null);
+
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+                getContext());
+
+        // set prompts.xml to alertdialog builder
+        alertDialogBuilder.setView(promptsView);
+
+        final EditText userInput = (EditText) promptsView
+                .findViewById(R.id.eInformation);
+
+        // set dialog message
+        alertDialogBuilder
+                .setCancelable(false)
+                .setPositiveButton("OK",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog,int id) {
+                                updateData[0] = userInput.getText().toString();
+                            }
+                        })
+                .setNegativeButton("Cancel",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog,int id) {
+                                dialog.cancel();
+                            }
+                        });
+
+        // create alert dialog
+        AlertDialog alertDialog = alertDialogBuilder.create();
+
+        // show it
+        alertDialog.show();
+
+        return updateData[0];
     }
 }

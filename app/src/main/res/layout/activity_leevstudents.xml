@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context=".View.UserActivity"
+    tools:context=".View.LEEVStudentsActivity"
     tools:openDrawer="start">
 
     <RelativeLayout
@@ -23,22 +23,10 @@
             android:orientation="vertical"
             android:layout_below="@id/toolbar">
 
-            <TextView
+            <ListView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/tUserId"/>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/tUserName"/>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/tUserEmail"/>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/tUserProjects"/>
+                android:id="@+id/lLeevStudents"/>
 
         </LinearLayout>
 

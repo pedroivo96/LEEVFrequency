@@ -9,7 +9,9 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.view.MenuItem;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.ufpi.leevfrequency.R;
+import com.ufpi.leevfrequency.View.LoginActivity;
 import com.ufpi.leevfrequency.View.UserActivity;
 import com.ufpi.leevfrequency.View.UserRegisterActivity;
 
@@ -56,6 +58,12 @@ public class NavigationDrawerUtils {
                             break;
                         }
                         case R.id.nav_logout:{
+
+                            FirebaseAuth.getInstance().signOut();
+                            Intent intent2 = new Intent(context, LoginActivity.class);
+                            context.startActivity(intent2);
+                            finishCurrentActivity();
+
                             break;
                         }
 
@@ -91,6 +99,12 @@ public class NavigationDrawerUtils {
                             break;
                         }
                         case R.id.nav_logout:{
+
+                            FirebaseAuth.getInstance().signOut();
+                            Intent intent2 = new Intent(context, LoginActivity.class);
+                            context.startActivity(intent2);
+                            finishCurrentActivity();
+
                             break;
                         }
 
