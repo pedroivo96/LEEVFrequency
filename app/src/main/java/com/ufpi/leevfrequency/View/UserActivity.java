@@ -95,7 +95,7 @@ public class UserActivity extends AppCompatActivity {
                         .child(prefs.getString(ConstantUtils.USER_FIELD_ID,""))
                         .child(id)
                         .child(ConstantUtils.FREQUENCY_FIELD_DATE)
-                        .setValue(000000000);
+                        .setValue(Calendar.getInstance().getTime().getTime());
             }
         });
 
