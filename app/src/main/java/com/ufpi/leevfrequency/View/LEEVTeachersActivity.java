@@ -57,7 +57,7 @@ public class LEEVTeachersActivity extends AppCompatActivity {
                 .child(ConstantUtils.DATABASE_ACTUAL_BRANCH)
                 .child(ConstantUtils.USERS_BRANCH);
 
-        lLeevTeachers = findViewById(R.id.lLeevStudents);
+        lLeevTeachers = findViewById(R.id.lLeevTeachers);
         leevTeachers = new ArrayList<>();
 
         leevTeachersAdapter = new LeevTeachersAdapter(leevTeachers, getContext());

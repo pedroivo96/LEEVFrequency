@@ -1,17 +1,22 @@
 package com.ufpi.leevfrequency.View;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -24,6 +29,7 @@ import android.view.View;
 import android.support.v7.widget.Toolbar;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
@@ -31,16 +37,25 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
+import com.ufpi.leevfrequency.Model.Frequency;
 import com.ufpi.leevfrequency.R;
 import com.ufpi.leevfrequency.Utils.ConstantUtils;
+import com.ufpi.leevfrequency.Utils.EventDecorator;
 import com.ufpi.leevfrequency.Utils.NavigationDrawerUtils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
+import com.prolificinteractive.materialcalendarview.CalendarDay;
 
 public class UserActivity extends AppCompatActivity {
+
+    private static final String networkName = "PEDRO";
 
     //------------------------- NavigationDrawer---------------------------------------------------
     private Toolbar toolbar;
@@ -52,53 +67,97 @@ public class UserActivity extends AppCompatActivity {
     private TextView tUserEmail;
     private TextView tUserProjects;
     private Button bAddNewFrequency;
+    private MaterialCalendarView calendarUserFrequencies;
+
+    private ArrayList<Frequency> userFrequencies;
 
     private SharedPreferences prefs = null;
 
     private DatabaseReference mDatabaseUsers;
     private DatabaseReference mDatabaseFrequencies;
 
+    private static final String FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
+    private static final String COURSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION;
+    private static final int LOCATION_PERMISSION_REQUEST_CODE = 1234;
+    private Boolean mLocationPermissionsGranted = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user);
 
-        prefs = getSharedPreferences("com.ufpi.leevfrequency", MODE_PRIVATE);
-
         mDatabaseUsers = FirebaseDatabase.getInstance().getReference()
                 .child(ConstantUtils.DATABASE_ACTUAL_BRANCH)
                 .child(ConstantUtils.USERS_BRANCH);
+        mDatabaseFrequencies = FirebaseDatabase.getInstance().getReference()
+                .child(ConstantUtils.DATABASE_ACTUAL_BRANCH)
+                .child(ConstantUtils.FREQUENCIES_BRANCH);
+
+        prefs = getSharedPreferences("com.ufpi.leevfrequency", MODE_PRIVATE);
+
+        userFrequencies = new ArrayList<>();
 
         tUserId = findViewById(R.id.tUserId);
         tUserName = findViewById(R.id.tUserName);
         tUserEmail = findViewById(R.id.tUserEmail);
         tUserProjects = findViewById(R.id.tUserProjects);
         bAddNewFrequency = findViewById(R.id.bAddNewFrequency);
+        calendarUserFrequencies = findViewById(R.id.calendarUserFrequencies);
+
+        calendarUserFrequencies.setSelectionMode(MaterialCalendarView.SELECTION_MODE_NONE);
 
         /* Método responsável por configurar os eventos de edição de informações do usuário ao apertar
         * e segurar cada TextView */
         setUpdateUserInformationEvents();
 
-        /*Método usa para checar a conectividade e adicionar um registro de frequẽncia do aluno
-        * atualmente logado */
-        verifyAndAddFrequency();
+        if(prefs.getInt(ConstantUtils.USER_FIELD_USERTYPE, -1) == ConstantUtils.USER_TYPE_STUDENT){
+            //Caso seja estudante
 
-        bAddNewFrequency.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                DatabaseReference elementReference = mDatabaseFrequencies
-                        .child(prefs.getString(ConstantUtils.USER_FIELD_ID,""))
-                        .push();
-                String id = elementReference.getKey();
+            getLocationPermission();
 
-                mDatabaseFrequencies
-                        .child(prefs.getString(ConstantUtils.USER_FIELD_ID,""))
-                        .child(id)
-                        .child(ConstantUtils.FREQUENCY_FIELD_DATE)
-                        .setValue(Calendar.getInstance().getTime().getTime());
-            }
-        });
+            getUserFrequencies();
 
+            bAddNewFrequency.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    DatabaseReference elementReference = mDatabaseFrequencies
+                            .child(prefs.getString(ConstantUtils.USER_FIELD_ID,""))
+                            .push();
+                    String id = elementReference.getKey();
+
+                    mDatabaseFrequencies
+                            .child(prefs.getString(ConstantUtils.USER_FIELD_ID,""))
+                            .child(id)
+                            .child(ConstantUtils.FREQUENCY_FIELD_DATE)
+                            .setValue(Calendar.getInstance().getTime().getTime());
+                }
+            });
+
+        }
+        else{
+            //Caso seja professor
+
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(0, 0, 0f);
+            calendarUserFrequencies.setLayoutParams(params);
+
+            bAddNewFrequency.setLayoutParams(params);
+        }
+
+        configureNavigationDrawer();
+
+        //Busca as informação do usuário logado para exibí-las nessa tela
+        mDatabaseUsers
+                .orderByChild(ConstantUtils.USER_FIELD_EMAIL)
+                .equalTo(prefs.getString(ConstantUtils.USER_FIELD_EMAIL,""))
+                .addValueEventListener(getUserInformationListener());
+
+    }
+
+    private Context getContext(){
+        return this;
+    }
+
+    private void configureNavigationDrawer(){
         //----------------------------Configure NavigationDrawer------------------------------------
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
@@ -147,16 +206,6 @@ public class UserActivity extends AppCompatActivity {
                 NavigationDrawerUtils.getNavigationDrawerItemSelectedListener(getContext(),
                         prefs.getInt(ConstantUtils.USER_FIELD_USERTYPE,-1), drawerLayout));
 
-        //Busca as informação do usuário logado para exibí-las nessa tela
-        mDatabaseUsers
-                .orderByChild(ConstantUtils.USER_FIELD_EMAIL)
-                .equalTo(prefs.getString(ConstantUtils.USER_FIELD_EMAIL,""))
-                .addValueEventListener(getUserInformationListener());
-
-    }
-
-    private Context getContext(){
-        return this;
     }
 
     private ValueEventListener getUserInformationListener(){
@@ -272,6 +321,8 @@ public class UserActivity extends AppCompatActivity {
             Log.i("TAG", "Você está conectado a uma rede");
 
             if(isUFPINetwork()){
+
+                Log.i("TAG", "Você está conectado à rede solicitada "+networkName);
                 //Obter as horas 00:00 e 23:59 do dia de hoje
 
                 Date currentTime = Calendar.getInstance().getTime();
@@ -303,7 +354,7 @@ public class UserActivity extends AppCompatActivity {
 
             }
             else{
-                Log.i("TAG", "Não está conectado à rede da UFPI");
+                Log.i("TAG", "Não está conectado à rede solicitada "+networkName);
             }
         }
         else{
@@ -319,16 +370,24 @@ public class UserActivity extends AppCompatActivity {
 
     private boolean isUFPINetwork(){
 
-        String ssid = null;
+        String ssid = "";
         ConnectivityManager connManager = (ConnectivityManager) getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-        if (networkInfo.isConnected()) {
-            final WifiManager wifiManager = (WifiManager) getContext().getApplicationContext().getSystemService(Context.WIFI_SERVICE);
-            final WifiInfo connectionInfo = wifiManager.getConnectionInfo();
-            if (connectionInfo != null && !ssid.isEmpty()) {
-                ssid = connectionInfo.getSSID();
 
-                if(ssid.equals("UFPI")){
+        if (networkInfo.isConnected()) {
+
+            final WifiManager wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+            final WifiInfo connectionInfo = wifiManager.getConnectionInfo();
+
+            Log.i("TAG", connectionInfo.getSSID());
+            Log.i("TAG", connectionInfo.getBSSID());
+
+            if (connectionInfo != null) {
+                ssid = connectionInfo.getSSID();
+                ssid = ssid.substring(1,ssid.length()-1);//Remove as aspas
+
+                Log.i("TAG", "Você está conectado à rede "+ssid);
+                if(ssid.equals(networkName)){
                     return true;
                 }
                 else{
@@ -369,5 +428,119 @@ public class UserActivity extends AppCompatActivity {
 
             }
         };
+    }
+
+    private void getUserFrequencies(){
+        mDatabaseFrequencies
+                .child(prefs.getString(ConstantUtils.USER_FIELD_ID, ""))
+                .addValueEventListener(getUserFrequenciesListener());
+    }
+
+    private ValueEventListener getUserFrequenciesListener() {
+        return new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()){
+
+                    for(DataSnapshot d: dataSnapshot.getChildren()){
+
+                        Frequency frequency = new Frequency();
+                        frequency.setId(d.getKey());
+                        frequency.setDate((Long) d.child(ConstantUtils.FREQUENCY_FIELD_DATE).getValue());
+
+                        userFrequencies.add(frequency);
+                    }
+                    Log.i("TAG", String.valueOf(dataSnapshot.getChildrenCount()));
+                }
+
+                calendarUserFrequencies.clearSelection();
+                ArrayList<CalendarDay> calendarDays = new ArrayList<>();
+
+                for(Frequency f : userFrequencies){
+
+                    Date date = new Date();
+                    date.setTime(f.getDate());
+
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.setTime(date);
+
+                    int day = calendar.get(Calendar.DAY_OF_MONTH);
+                    int month = calendar.get(Calendar.MONTH)+1;
+                    int year = calendar.get(Calendar.YEAR);
+
+                    Log.i("TAG", day+"/"+month+"/"+year);
+
+                    calendarUserFrequencies
+                            .setDateSelected(CalendarDay.from(year, month, day), true);
+                    calendarDays.add(CalendarDay.from(year, month, day));
+                }
+
+                /*Adiciona ao CalendarView um EventDecorator que permite posicionar um ponto embaixo
+                * das datas contidas na lista calendarDays */
+                calendarUserFrequencies.addDecorator(new EventDecorator(R.color.colorAccent, calendarDays));
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        };
+    }
+
+    private void getLocationPermission(){
+        Log.i("TAG", "getLocationPermission: getting location permissions");
+        String[] permissions = {Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.ACCESS_COARSE_LOCATION};
+
+        if(ContextCompat.checkSelfPermission(this.getApplicationContext(),
+                FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
+            if(ContextCompat.checkSelfPermission(this.getApplicationContext(),
+                    COURSE_LOCATION) == PackageManager.PERMISSION_GRANTED){
+                //As duas permissões foram fornecidas
+                mLocationPermissionsGranted = true;
+
+                /*Método usa para checar a conectividade e adicionar um registro de frequẽncia do aluno
+                 * atualmente logado */
+                verifyAndAddFrequency();
+            }else{
+                //Solicitar a segunda permissão
+                ActivityCompat.requestPermissions(this,
+                        permissions,
+                        LOCATION_PERMISSION_REQUEST_CODE);
+            }
+        }else{
+            //Solicitar a primeira permissão
+            ActivityCompat.requestPermissions(this,
+                    permissions,
+                    LOCATION_PERMISSION_REQUEST_CODE);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        Log.i("TAG", "onRequestPermissionsResult: called.");
+        mLocationPermissionsGranted = false;
+
+        switch(requestCode){
+            case LOCATION_PERMISSION_REQUEST_CODE:{
+                if(grantResults.length > 0){
+                    for(int i = 0; i < grantResults.length; i++){
+                        if(grantResults[i] != PackageManager.PERMISSION_GRANTED){
+                            mLocationPermissionsGranted = false;
+
+                            Log.i("TAG", "onRequestPermissionsResult: permission failed");
+                            return;
+                        }
+                    }
+                    Log.i("TAG", "onRequestPermissionsResult: permission granted");
+                    mLocationPermissionsGranted = true;
+
+                    /*Método usa para checar a conectividade e adicionar um registro de frequẽncia do aluno
+                     * atualmente logado */
+                    verifyAndAddFrequency();
+                }
+            }
+        }
     }
 }

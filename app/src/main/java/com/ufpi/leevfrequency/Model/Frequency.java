@@ -2,14 +2,14 @@ package com.ufpi.leevfrequency.Model;
 
 public class Frequency {
 
-    private int id;
+    private String id;
     private long date;
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 

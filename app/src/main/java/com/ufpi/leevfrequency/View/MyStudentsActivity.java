@@ -1,6 +1,9 @@
 package com.ufpi.leevfrequency.View;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
@@ -13,8 +16,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -31,6 +37,7 @@ import com.ufpi.leevfrequency.Utils.NavigationDrawerUtils;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 
 public class MyStudentsActivity extends AppCompatActivity {
 
@@ -46,6 +53,8 @@ public class MyStudentsActivity extends AppCompatActivity {
     private ArrayList<User> myStudents;
     private MyStudentsAdapter myStudentsAdapter;
 
+    private AlertDialog alerta;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,11 +66,30 @@ public class MyStudentsActivity extends AppCompatActivity {
                 .child(ConstantUtils.DATABASE_ACTUAL_BRANCH)
                 .child(ConstantUtils.USERS_BRANCH);
 
-        lMyStudents = findViewById(R.id.lLeevStudents);
+        lMyStudents = findViewById(R.id.lMyStudents);
         myStudents = new ArrayList<>();
 
-        myStudentsAdapter = new MyStudentsAdapter(myStudents, getContext());
-        lMyStudents.setAdapter(myStudentsAdapter);
+        lMyStudents.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                User student = myStudents.get(position);
+
+                Intent intent = new Intent(getContext(), UserAdvisorModeActivity.class);
+                intent.putExtra("idStudent", student.getId());
+                startActivity(intent);
+            }
+        });
+
+        lMyStudents.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+
+                createAndShowStudentOptionsMenu(myStudents.get(position).getId(), position);
+
+                return true;
+            }
+        });
 
         //----------------------------Configure NavigationDrawer------------------------------------
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
@@ -122,7 +150,11 @@ public class MyStudentsActivity extends AppCompatActivity {
         return new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
                 if(dataSnapshot.exists()){
+
+                    myStudents = new ArrayList<>();
+
                     for(DataSnapshot d: dataSnapshot.getChildren()){
 
                         if((Boolean)d.child(ConstantUtils.USER_FIELD_VISIBLE).getValue()){
@@ -140,14 +172,14 @@ public class MyStudentsActivity extends AppCompatActivity {
                         }
                     }
 
+                    myStudentsAdapter = new MyStudentsAdapter(myStudents, getContext());
+                    lMyStudents.setAdapter(myStudentsAdapter);
+
                     Collections.sort(myStudents, new Comparator<User>() {
                         public int compare(User u1, User u2) {
                             return u1.getName().compareTo(u2.getName());
                         }
                     });
-
-                    //Verifica se há alterações na lista de estudantes
-                    myStudentsAdapter.notifyDataSetChanged();
                 }
             }
 
@@ -160,5 +192,148 @@ public class MyStudentsActivity extends AppCompatActivity {
 
     private Context getContext(){
         return this;
+    }
+
+    private void createAndShowRemoveStudentDialog(final String idStudent, final int position){
+        //Cria o gerador do AlertDialog
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        //define o titulo
+        builder.setTitle("Remoção");
+        //define a mensagem
+        builder.setMessage("Você realmente deseja remover esse aluno ?");
+        //define um botão como positivo
+        builder.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface arg0, int arg1) {
+                Toast.makeText(getContext(), "positivo=" + arg1, Toast.LENGTH_SHORT).show();
+
+                HashMap<String, Object> result = new HashMap<>();
+                result.put(ConstantUtils.USER_FIELD_VISIBLE, false);
+
+                mDatabase
+                        .child(idStudent)
+                        .updateChildren(result);
+                //myStudents.remove(position);
+
+            }
+        });
+        //define um botão como negativo.
+        builder.setNegativeButton("Não", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface arg0, int arg1) {
+                Toast.makeText(getContext(), "negativo=" + arg1, Toast.LENGTH_SHORT).show();
+            }
+        });
+        //cria o AlertDialog
+        alerta = builder.create();
+        //Exibe
+        alerta.show();
+    }
+
+    private void createAndShowStudentOptionsMenu(final String idStudent, final int position){
+
+        final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getContext(), R.layout.dialog_list_textview, R.id.textView1);
+        arrayAdapter.add("Remover");
+        arrayAdapter.add("Transferir");
+
+        AlertDialog.Builder builderSingle = new AlertDialog.Builder(getContext());
+        builderSingle.setIcon(null);
+        builderSingle.setTitle("Menu");
+
+        builderSingle.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        builderSingle.setAdapter(arrayAdapter, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String strName = arrayAdapter.getItem(which);
+
+                switch (which){
+                    case 0:
+
+                        //Remover
+                        createAndShowRemoveStudentDialog(idStudent, position);
+                        break;
+                    case 1:
+
+                        //Transferir
+                        //Mostra uma lista com os nomes de todos os professores
+                        createAndShowTeachersList(idStudent, position);
+                        break;
+                }
+            }
+        });
+        builderSingle.show();
+    }
+
+    private void createAndShowTeachersList(String idStudent, int position){
+
+        mDatabase
+                .orderByChild(ConstantUtils.USER_FIELD_USERTYPE)
+                .equalTo(ConstantUtils.USER_TYPE_TEACHER)
+                .addListenerForSingleValueEvent(getTeachersList(idStudent,position));
+    }
+
+    private ValueEventListener getTeachersList(final String idStudent, int position){
+        return new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                if(dataSnapshot.exists()){
+
+                    final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getContext(), R.layout.dialog_list_textview, R.id.textView1);
+
+                    ArrayList<String> teachersNameList = new ArrayList<>();
+                    final ArrayList<String> teachersIdList = new ArrayList<>();
+
+                    for(DataSnapshot d : dataSnapshot.getChildren()){
+
+                        teachersIdList.add(d.getKey());
+                        arrayAdapter.add((String) d.child(ConstantUtils.USER_FIELD_NAME).getValue());
+                    }
+
+                    //Lista de fiscais pronta
+                    AlertDialog.Builder builderSingle = new AlertDialog.Builder(getContext());
+                    builderSingle.setIcon(null);
+                    builderSingle.setTitle("Selecione o professor");
+
+                    builderSingle.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                            dialog.dismiss();
+                        }
+                    });
+
+                    builderSingle.setAdapter(arrayAdapter, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                            String strName = arrayAdapter.getItem(which);
+                            AlertDialog.Builder builderInner = new AlertDialog.Builder(getContext());
+                            builderInner.setMessage(strName);
+                            builderInner.setTitle("Your Selected Item is");
+
+                            String idTeacher = teachersIdList.get(which);
+
+                            HashMap<String, Object> result = new HashMap<>();
+                            result.put(ConstantUtils.USER_FIELD_IDADVISOR, idTeacher);
+
+                            mDatabase.child(idStudent).updateChildren(result);
+
+                            builderInner.show();
+                        }
+                    });
+                    builderSingle.show();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        };
     }
 }

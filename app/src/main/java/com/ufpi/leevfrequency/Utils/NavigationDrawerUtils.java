@@ -11,7 +11,10 @@ import android.view.MenuItem;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.ufpi.leevfrequency.R;
+import com.ufpi.leevfrequency.View.LEEVStudentsActivity;
+import com.ufpi.leevfrequency.View.LEEVTeachersActivity;
 import com.ufpi.leevfrequency.View.LoginActivity;
+import com.ufpi.leevfrequency.View.MyStudentsActivity;
 import com.ufpi.leevfrequency.View.UserActivity;
 import com.ufpi.leevfrequency.View.UserRegisterActivity;
 
@@ -42,6 +45,10 @@ public class NavigationDrawerUtils {
                             break;
                         }
                         case R.id.nav_my_students:{
+
+                            Intent intent = new Intent(context, MyStudentsActivity.class);
+                            context.startActivity(intent);
+
                             break;
                         }
                         case R.id.nav_user_register:{
@@ -52,9 +59,15 @@ public class NavigationDrawerUtils {
                             break;
                         }
                         case R.id.nav_leev_students:{
+
+                            Intent intent = new Intent(context, LEEVStudentsActivity.class);
+                            context.startActivity(intent);
                             break;
                         }
                         case R.id.nav_leev_teachers:{
+
+                            Intent intent = new Intent(context, LEEVTeachersActivity.class);
+                            context.startActivity(intent);
                             break;
                         }
                         case R.id.nav_logout:{
@@ -93,9 +106,15 @@ public class NavigationDrawerUtils {
                             break;
                         }
                         case R.id.nav_leev_teachers:{
+
+                            Intent intent = new Intent(context, LEEVTeachersActivity.class);
+                            context.startActivity(intent);
                             break;
                         }
                         case R.id.nav_leev_students:{
+
+                            Intent intent = new Intent(context, LEEVStudentsActivity.class);
+                            context.startActivity(intent);
                             break;
                         }
                         case R.id.nav_logout:{

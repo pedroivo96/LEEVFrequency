@@ -4,6 +4,8 @@
 
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
         android:allowBackup="true"
@@ -12,14 +14,39 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".View.MyStudentsActivity"></activity>
-        <activity android:name=".View.LEEVTeachersActivity" />
-        <activity android:name=".View.LEEVStudentsActivity" />
-        <activity android:name=".View.UserRegisterActivity" />
+        <activity
+            android:name=".View.ForgetPasswordActivity"
+            android:label="Esqueci minha senha"/>
+        <activity
+            android:name=".View.FinalizeRegisterActivity"
+            android:theme="@style/AppThemeNoActionBar"
+            android:label="Finalizar registro"/>
+        <activity
+            android:name=".View.UserAdvisorModeActivity"
+            android:theme="@style/AppThemeNoActionBar"
+            android:label="Perfil de usuário"/>
+        <activity
+            android:name=".View.MyStudentsActivity"
+            android:theme="@style/AppThemeNoActionBar"
+            android:label="Meus estudantes"/>
+        <activity
+            android:name=".View.LEEVTeachersActivity"
+            android:theme="@style/AppThemeNoActionBar"
+            android:label="Professores do LEEV"/>
+        <activity
+            android:name=".View.LEEVStudentsActivity"
+            android:theme="@style/AppThemeNoActionBar"
+            android:label="Estudantes do LEEV"/>
+        <activity
+            android:name=".View.UserRegisterActivity"
+            android:theme="@style/AppThemeNoActionBar"
+            android:label="Cadastro de usuário"/>
         <activity
             android:name=".View.UserActivity"
-            android:theme="@style/AppThemeNoActionBar" />
-        <activity android:name=".View.LoginActivity" />
+            android:theme="@style/AppThemeNoActionBar"
+            android:label="Meu perfil"/>
+        <activity android:name=".View.LoginActivity"
+            android:label="Login"/>
         <activity android:name=".View.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

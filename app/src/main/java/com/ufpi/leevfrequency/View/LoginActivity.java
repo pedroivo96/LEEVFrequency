@@ -34,6 +34,8 @@ public class LoginActivity extends AppCompatActivity {
     private EditText ePassword;
     private Button bLogin;
     private Button bForgetPassword;
+    private Button bFinalizeRegister;
+    private Button bInsertTest;
 
     private FirebaseAuth mAuth;
 
@@ -55,6 +57,8 @@ public class LoginActivity extends AppCompatActivity {
         ePassword = findViewById(R.id.ePassword);
         bLogin = findViewById(R.id.bLogin);
         bForgetPassword = findViewById(R.id.bForgetPassword);
+        bFinalizeRegister = findViewById(R.id.bFinalizeRegister);
+        bInsertTest = findViewById(R.id.bInsertTest);
 
         bLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -86,7 +90,33 @@ public class LoginActivity extends AppCompatActivity {
         bForgetPassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Intent intent = new Intent(getContext(), ForgetPasswordActivity.class);
+                startActivity(intent);
+            }
+        });
 
+        bFinalizeRegister.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), FinalizeRegisterActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        bInsertTest.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                DatabaseReference elementReference = mDatabase.push();
+                String id = elementReference.getKey();
+
+                mDatabase.child(id).child(ConstantUtils.USER_FIELD_NAME).setValue("Pedro Ivo Soares Barbosa");
+                mDatabase.child(id).child(ConstantUtils.USER_FIELD_EMAIL).setValue("soaresbarbosapedroivo@gmail");
+                mDatabase.child(id).child(ConstantUtils.USER_FIELD_PROJECTS).setValue("Automação Laboratorial");
+                mDatabase.child(id).child(ConstantUtils.USER_FIELD_USERTYPE).setValue(ConstantUtils.USER_TYPE_TEACHER);
+                mDatabase.child(id).child(ConstantUtils.USER_FIELD_VISIBLE).setValue(true);
+                mDatabase.child(id).child(ConstantUtils.USER_FIELD_REGISTERFINALIZED).setValue(false);
+                mDatabase.child(id).child(ConstantUtils.USER_FIELD_IDADVISOR).setValue("Sem orientador");
             }
         });
     }

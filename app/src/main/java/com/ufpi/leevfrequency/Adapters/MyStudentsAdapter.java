@@ -56,17 +56,9 @@ public class MyStudentsAdapter extends BaseAdapter {
 
         TextView tStudentName = view1.findViewById(R.id.tStudentName);
         TextView tStudentProjects = view1.findViewById(R.id.tStudentProjects);
-        ImageButton bRemoveStudent = view1.findViewById(R.id.bRemoveStudent);
 
         tStudentName.setText(student.getName());
         tStudentProjects.setText(student.getProjects());
-
-        bRemoveStudent.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mDatabase.child(student.getId()).child(ConstantUtils.USER_FIELD_VISIBLE).setValue(false);
-            }
-        });
 
         return view1;
     }
