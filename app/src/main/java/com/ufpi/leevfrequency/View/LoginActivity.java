@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.TextInputEditText;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -30,12 +32,16 @@ import com.ufpi.leevfrequency.Utils.MethodUtils;
 
 public class LoginActivity extends AppCompatActivity {
 
+    private TextInputLayout textInputLayoutEmail;
+    private TextInputLayout textInputLayoutPassword;
+
     private EditText eEmail;
     private EditText ePassword;
+
     private Button bLogin;
     private Button bForgetPassword;
     private Button bFinalizeRegister;
-    private Button bInsertTest;
+    //private Button bInsertTest;
 
     private FirebaseAuth mAuth;
 
@@ -53,28 +59,37 @@ public class LoginActivity extends AppCompatActivity {
                 .child(ConstantUtils.DATABASE_ACTUAL_BRANCH)
                 .child(ConstantUtils.USERS_BRANCH);
 
-        eEmail = findViewById(R.id.eEmail);
+        textInputLayoutEmail = findViewById(R.id.textInputLayoutEmail);
+        textInputLayoutPassword = findViewById(R.id.textInputLayoutPassword);
+
         ePassword = findViewById(R.id.ePassword);
+        eEmail = findViewById(R.id.eEmail);
+
         bLogin = findViewById(R.id.bLogin);
         bForgetPassword = findViewById(R.id.bForgetPassword);
         bFinalizeRegister = findViewById(R.id.bFinalizeRegister);
-        bInsertTest = findViewById(R.id.bInsertTest);
+        //bInsertTest = findViewById(R.id.bInsertTest);
 
         bLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
+                clearErrorEmail();
+                clearErrorPassword();
+
                 //Verificar se algum dos campos está vazio
                 if(eEmail.getText().toString().isEmpty() ||
                    ePassword.getText().toString().isEmpty()){
 
-                    Toast.makeText(getContext(), "Um dos campos está vazio!", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getContext(), "Um dos campos está vazio!", Toast.LENGTH_SHORT).show();
+                    checkEmptyFields();
                 }
                 else{
 
                     //Verificar se o campo de e-mail possui um endereço de e-mail válido
                     if(!MethodUtils.isEmailValid(eEmail.getText().toString())){
-                        Toast.makeText(getContext(), "Informe um e-mail válido!", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(getContext(), "Informe um e-mail válido!", Toast.LENGTH_SHORT).show();
+                        enableAndShowErrorEmail("Informe um e-mail válido");
                     }
                     else{
 
@@ -103,6 +118,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+        /*
         bInsertTest.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -119,6 +135,7 @@ public class LoginActivity extends AppCompatActivity {
                 mDatabase.child(id).child(ConstantUtils.USER_FIELD_IDADVISOR).setValue("Sem orientador");
             }
         });
+        */
     }
 
     private Context getContext(){
@@ -196,11 +213,43 @@ public class LoginActivity extends AppCompatActivity {
                             Toast.makeText(getContext(), "Usuário não encontrado", Toast.LENGTH_SHORT).show();
                             break;
                         case "ERROR_WRONG_PASSWORD":
-                            Toast.makeText(getContext(), "Senha inválida", Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(getContext(), "Senha inválida", Toast.LENGTH_SHORT).show();
+
+                            enableAndShowErrorPassword("Senha inválida");
                             break;
                     }
                 }
             }
         };
     }
+
+    private void checkEmptyFields(){
+        if(eEmail.getText().toString().isEmpty()){
+            enableAndShowErrorEmail("O campo de e-mail não pode estar vazio");
+        }
+        if(ePassword.getText().toString().isEmpty()){
+            enableAndShowErrorPassword("O campo de senha não pode estar vazio");
+        }
+    }
+
+    private void enableAndShowErrorEmail(String errorMessage){
+        textInputLayoutEmail.setErrorEnabled(true);
+        textInputLayoutEmail.setError(errorMessage);
+    }
+
+    private void enableAndShowErrorPassword(String errorMessage){
+        textInputLayoutPassword.setErrorEnabled(true);
+        textInputLayoutPassword.setError(errorMessage);
+    }
+
+    private void clearErrorPassword(){
+        textInputLayoutPassword.setErrorEnabled(false);
+        textInputLayoutPassword.setError(null);
+    }
+
+    private void clearErrorEmail(){
+        textInputLayoutEmail.setErrorEnabled(false);
+        textInputLayoutEmail.setError(null);
+    }
+
 }

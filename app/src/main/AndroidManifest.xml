@@ -16,37 +16,48 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".View.ForgetPasswordActivity"
-            android:label="Esqueci minha senha"/>
+            android:label="Esqueci minha senha"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".View.FinalizeRegisterActivity"
             android:theme="@style/AppThemeNoActionBar"
-            android:label="Finalizar registro"/>
+            android:label="Finalizar registro"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".View.UserAdvisorModeActivity"
             android:theme="@style/AppThemeNoActionBar"
-            android:label="Perfil de usuário"/>
+            android:label="Perfil de usuário"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".View.MyStudentsActivity"
             android:theme="@style/AppThemeNoActionBar"
-            android:label="Meus estudantes"/>
+            android:label="Meus estudantes"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".View.LEEVTeachersActivity"
             android:theme="@style/AppThemeNoActionBar"
-            android:label="Professores do LEEV"/>
+            android:label="Professores do LEEV"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".View.LEEVStudentsActivity"
             android:theme="@style/AppThemeNoActionBar"
-            android:label="Estudantes do LEEV"/>
+            android:label="Estudantes do LEEV"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".View.UserRegisterActivity"
             android:theme="@style/AppThemeNoActionBar"
-            android:label="Cadastro de usuário"/>
+            android:label="Cadastro de usuário"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".View.UserActivity"
             android:theme="@style/AppThemeNoActionBar"
-            android:label="Meu perfil"/>
-        <activity android:name=".View.LoginActivity"
-            android:label="Login"/>
+            android:label="Meu perfil"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".View.LoginActivity"
+            android:label="Login"
+            android:theme="@style/AppThemeNoActionBar"
+            android:screenOrientation="portrait"/>
         <activity android:name=".View.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

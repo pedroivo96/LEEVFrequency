@@ -41,6 +41,8 @@ dependencies {
     implementation 'com.android.support:design:26.+'
 
     implementation 'com.github.prolificinteractive:material-calendarview:2.0.0'
+
+    implementation 'com.android.support:design:26+'
 }
 
 apply plugin: 'com.google.gms.google-services'
