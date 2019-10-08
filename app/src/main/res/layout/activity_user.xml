@@ -25,30 +25,96 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:weightSum="10"
+                android:padding="@dimen/activity_padding"
                 android:orientation="vertical">
 
-                <TextView
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/tUserId"/>
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/tUserName"/>
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/tUserEmail"/>
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/tUserProjects"/>
+                    android:orientation="vertical"
+                    android:layout_marginBottom="10dp">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/primaryTextColorTransparent"
+                        android:textSize="@dimen/body2"
+                        android:text="ID do usuário"/>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textAlignment="center"
+                        android:textColor="@color/primaryTextColor"
+                        android:textSize="@dimen/body1"
+                        android:id="@+id/tUserId"/>
+                </LinearLayout>
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginBottom="10dp">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/primaryTextColorTransparent"
+                        android:textSize="@dimen/body2"
+                        android:text="Nome"/>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textAlignment="center"
+                        android:textColor="@color/primaryTextColor"
+                        android:textSize="@dimen/body1"
+                        android:id="@+id/tUserName"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginBottom="10dp">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/primaryTextColorTransparent"
+                        android:textSize="@dimen/body2"
+                        android:text="E-mail"/>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textAlignment="center"
+                        android:textColor="@color/primaryTextColor"
+                        android:textSize="@dimen/body1"
+                        android:id="@+id/tUserEmail"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginBottom="10dp">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/primaryTextColorTransparent"
+                        android:textSize="@dimen/body2"
+                        android:text="Área/Projetos"/>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textAlignment="center"
+                        android:textColor="@color/primaryTextColor"
+                        android:textSize="@dimen/body1"
+                        android:id="@+id/tUserProjects"/>
+                </LinearLayout>
+
+                <!--
                 <Button
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Add new frequency"
                     android:id="@+id/bAddNewFrequency"/>
+                -->
 
                 <com.prolificinteractive.materialcalendarview.MaterialCalendarView
                     android:layout_width="match_parent"

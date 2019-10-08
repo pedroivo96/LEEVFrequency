@@ -22,6 +22,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.InputType;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -32,6 +33,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -41,6 +43,7 @@ import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import com.ufpi.leevfrequency.Model.Frequency;
 import com.ufpi.leevfrequency.R;
 import com.ufpi.leevfrequency.Utils.ConstantUtils;
+import com.ufpi.leevfrequency.Utils.DateTimeUtils;
 import com.ufpi.leevfrequency.Utils.EventDecorator;
 import com.ufpi.leevfrequency.Utils.NavigationDrawerUtils;
 
@@ -50,6 +53,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 
@@ -117,6 +121,7 @@ public class UserActivity extends AppCompatActivity {
 
             getUserFrequencies();
 
+            /*
             bAddNewFrequency.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -132,6 +137,7 @@ public class UserActivity extends AppCompatActivity {
                             .setValue(Calendar.getInstance().getTime().getTime());
                 }
             });
+            */
 
         }
         else{
@@ -140,7 +146,7 @@ public class UserActivity extends AppCompatActivity {
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(0, 0, 0f);
             calendarUserFrequencies.setLayoutParams(params);
 
-            bAddNewFrequency.setLayoutParams(params);
+            //bAddNewFrequency.setLayoutParams(params);
         }
 
         configureNavigationDrawer();
@@ -164,7 +170,7 @@ public class UserActivity extends AppCompatActivity {
 
         drawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
 
-        Drawable drawable = ResourcesCompat.getDrawable(getResources(), R.mipmap.ic_menu_black, getContext().getTheme());
+        Drawable drawable = ResourcesCompat.getDrawable(getResources(), R.mipmap.ic_menu_white, getContext().getTheme());
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, myToolbar, R.string.open_drawer, R.string.close_drawer);
         toggle.setDrawerIndicatorEnabled(false);
         toggle.setHomeAsUpIndicator(drawable);
@@ -234,11 +240,8 @@ public class UserActivity extends AppCompatActivity {
             @Override
             public boolean onLongClick(View v) {
 
-                String updateInformation = createAndShowInputDialog();
+                createAndShowInputDialog(ConstantUtils.USER_FIELD_NAME);
 
-                mDatabaseUsers
-                        .child(prefs.getString(ConstantUtils.USER_FIELD_ID,""))
-                        .child(ConstantUtils.USER_FIELD_NAME).setValue(updateInformation);
                 return true;
             }
         });
@@ -247,11 +250,8 @@ public class UserActivity extends AppCompatActivity {
             @Override
             public boolean onLongClick(View v) {
 
-                String updateInformation = createAndShowInputDialog();
+                createAndShowInputDialog(ConstantUtils.USER_FIELD_EMAIL);
 
-                mDatabaseUsers
-                        .child(prefs.getString(ConstantUtils.USER_FIELD_ID,""))
-                        .child(ConstantUtils.USER_FIELD_EMAIL).setValue(updateInformation);
                 return true;
             }
         });
@@ -260,39 +260,32 @@ public class UserActivity extends AppCompatActivity {
             @Override
             public boolean onLongClick(View v) {
 
-                String updateInformation = createAndShowInputDialog();
+                createAndShowInputDialog(ConstantUtils.USER_FIELD_PROJECTS);
 
-                mDatabaseUsers
-                        .child(prefs.getString(ConstantUtils.USER_FIELD_ID,""))
-                        .child(ConstantUtils.USER_FIELD_PROJECTS).setValue(updateInformation);
                 return true;
             }
         });
     }
 
-    private String createAndShowInputDialog(){
-        final String[] updateData = new String[1];
+    private void createAndShowInputDialog(final String field){
 
-        // get prompts.xml view
         LayoutInflater li = LayoutInflater.from(getContext());
         View promptsView = li.inflate(R.layout.input_dialog, null);
 
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
-                getContext());
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext(), R.style.MyDialogTheme);
 
-        // set prompts.xml to alertdialog builder
         alertDialogBuilder.setView(promptsView);
 
-        final EditText userInput = (EditText) promptsView
-                .findViewById(R.id.eInformation);
+        final EditText userInput = promptsView.findViewById(R.id.eInformation);
 
         // set dialog message
         alertDialogBuilder
-                .setCancelable(false)
+                .setCancelable(true)
                 .setPositiveButton("OK",
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog,int id) {
-                                updateData[0] = userInput.getText().toString();
+
+                                updateField(field, userInput.getText().toString());
                             }
                         })
                 .setNegativeButton("Cancel",
@@ -308,7 +301,6 @@ public class UserActivity extends AppCompatActivity {
         // show it
         alertDialog.show();
 
-        return updateData[0];
     }
 
     private void verifyAndAddFrequency(){
@@ -327,6 +319,10 @@ public class UserActivity extends AppCompatActivity {
 
                 Date currentTime = Calendar.getInstance().getTime();
                 SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+                Log.i("TAG",
+                        DateTimeUtils.getDateTimeFromTimeStamp(currentTime.getTime(), DateTimeUtils.DATE_FORMAT_4)+
+                                DateTimeUtils.getDateTimeFromTimeStamp(currentTime.getTime(), DateTimeUtils.DATE_FORMAT_1));
 
                 int day = Integer.parseInt((String) DateFormat.format("dd", currentTime));
                 int month = Integer.parseInt((String) DateFormat.format("MM", currentTime));
@@ -542,5 +538,14 @@ public class UserActivity extends AppCompatActivity {
                 }
             }
         }
+    }
+
+    private void updateField(String field, String updateInformation){
+        HashMap<String, Object> result = new HashMap<>();
+        result.put(field, updateInformation);
+
+        mDatabaseUsers
+                .child(prefs.getString(ConstantUtils.USER_FIELD_ID,""))
+                .updateChildren(result);
     }
 }

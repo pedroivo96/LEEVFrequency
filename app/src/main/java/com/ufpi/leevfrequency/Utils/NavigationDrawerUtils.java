@@ -99,9 +99,6 @@ public class NavigationDrawerUtils {
                             }
                             break;
                         }
-                        case R.id.nav_my_frequencies:{
-                            break;
-                        }
                         case R.id.nav_see_advisor:{
                             break;
                         }

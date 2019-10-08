@@ -53,7 +53,7 @@
                         android:layout_height="wrap_content"
                         android:hint="E-mail"
                         android:theme="@style/EditTextTheme"
-                        android:drawableLeft="@mipmap/mail_outlined_black"/>
+                        android:drawableLeft="@mipmap/ic_mail_outlined_black"/>
 
                 </android.support.design.widget.TextInputLayout>
 
@@ -75,7 +75,7 @@
                         android:layout_height="wrap_content"
                         android:hint="Senha"
                         android:theme="@style/EditTextTheme"
-                        android:drawableLeft="@mipmap/lock_outlined_black"/>
+                        android:drawableLeft="@mipmap/ic_lock_outlined_black"/>
 
                 </android.support.design.widget.TextInputLayout>
             </LinearLayout>
@@ -84,7 +84,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="3"
-                android:weightSum="3"
+                android:weightSum="4"
                 android:orientation="vertical">
 
                 <LinearLayout
@@ -94,7 +94,7 @@
                     <Button
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Login"
+                        android:text="LOGIN"
                         android:background="@drawable/rectangular_rounded_filled_secondary_color_selector"
                         android:textColor="@color/secondaryTextColor"
                         android:layout_marginBottom="10dp"
@@ -107,7 +107,7 @@
                     <Button
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Esqueci minha senha"
+                        android:text="ESQUECEU SUA SENHA ?"
                         android:background="@drawable/rectangular_rounded_filled_transparent_selector"
                         android:textColor="@color/primaryTextColorTransparent"
                         android:layout_marginBottom="10dp"
@@ -120,21 +120,24 @@
                     <Button
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Finalizar registro"
+                        android:text="JÁ POSSUI UM PRÉ-CADASTRO ?"
                         android:textColor="@color/primaryTextColorTransparent"
                         android:background="@drawable/rectangular_rounded_filled_transparent_selector"
                         android:id="@+id/bFinalizeRegister"/>
                 </LinearLayout>
 
-            </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1">
+                    <Button
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Inserir teste"
+                        android:id="@+id/bInsertTest"/>
+                </LinearLayout>
 
-            <!--
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Inserir teste"
-                android:id="@+id/bInsertTest"/>
-             -->
+            </LinearLayout>
 
         </LinearLayout>
 
