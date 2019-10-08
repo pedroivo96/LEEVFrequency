@@ -13,6 +13,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -45,6 +47,9 @@ public class LEEVStudentsActivity extends AppCompatActivity {
     private ArrayList<User> leevStudents;
     private LeevStudentsAdapter leevStudentsAdapter;
 
+    private LinearLayout linearLayoutLeevStudents;
+    private LinearLayout linearLayoutNoStudents;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,7 +73,7 @@ public class LEEVStudentsActivity extends AppCompatActivity {
 
         drawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
 
-        Drawable drawable = ResourcesCompat.getDrawable(getResources(), R.mipmap.ic_menu_black, getContext().getTheme());
+        Drawable drawable = ResourcesCompat.getDrawable(getResources(), R.mipmap.ic_menu_white, getContext().getTheme());
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, myToolbar, R.string.open_drawer, R.string.close_drawer);
         toggle.setDrawerIndicatorEnabled(false);
         toggle.setHomeAsUpIndicator(drawable);
@@ -121,6 +126,10 @@ public class LEEVStudentsActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()){
+
+                    showLeevStudentsLayout();
+                    notShowNoStudentsLayout();
+
                     for(DataSnapshot d: dataSnapshot.getChildren()){
 
                         if((Boolean)d.child(ConstantUtils.USER_FIELD_VISIBLE).getValue()){
@@ -148,6 +157,10 @@ public class LEEVStudentsActivity extends AppCompatActivity {
                     //Verifica se há alterações na lista de estudantes
                     leevStudentsAdapter.notifyDataSetChanged();
                 }
+                else{
+                    notShowLeevStudentsLayout();
+                    showNoStudentsLayout();
+                }
             }
 
             @Override
@@ -159,5 +172,23 @@ public class LEEVStudentsActivity extends AppCompatActivity {
 
     private Context getContext(){
         return this;
+    }
+
+    private void showLeevStudentsLayout(){
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0, 10.0f);
+        linearLayoutLeevStudents.setLayoutParams(params);
+    }
+    private void notShowLeevStudentsLayout(){
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0, 0.0f);
+        linearLayoutLeevStudents.setLayoutParams(params);
+    }
+
+    private void showNoStudentsLayout(){
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0, 10.0f);
+        linearLayoutNoStudents.setLayoutParams(params);
+    }
+    private void notShowNoStudentsLayout(){
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0, 0.0f);
+        linearLayoutNoStudents.setLayoutParams(params);
     }
 }

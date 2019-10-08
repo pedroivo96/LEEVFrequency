@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -55,6 +56,10 @@ public class UserRegisterActivity extends AppCompatActivity {
 
     private SharedPreferences prefs = null;
 
+    private TextInputLayout textInputLayoutName;
+    private TextInputLayout textInputLayoutEmail;
+    private TextInputLayout textInputLayoutProjects;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,6 +70,14 @@ public class UserRegisterActivity extends AppCompatActivity {
         eUserEmail = findViewById(R.id.eUserEmail);
         spUserType = findViewById(R.id.spUserType);
         bRegisterStudent = findViewById(R.id.bRegisterStudent);
+
+        textInputLayoutName = findViewById(R.id.textInputLayoutName);
+        textInputLayoutEmail = findViewById(R.id.textInputLayoutEmail);
+        textInputLayoutProjects = findViewById(R.id.textInputLayoutProjects);
+
+        textInputLayoutName.setHint("Nome do usuário");
+        textInputLayoutEmail.setHint("E-mail");
+        textInputLayoutProjects.setHint("Área/Projetos");
 
         prefs = getSharedPreferences("com.ufpi.leevfrequency", MODE_PRIVATE);
         idAdvisor = prefs.getString(ConstantUtils.USER_FIELD_ID,"");
@@ -79,9 +92,17 @@ public class UserRegisterActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
+                clearErrorName();
+                clearErrorEmail();
+                clearErrorProjects();
+
                 //Verifica campos vazios
-                if(verifyEmptyFields()){
-                    Toast.makeText(getContext(), "Um dos campos está vazio", Toast.LENGTH_SHORT).show();
+                if(eUserName.getText().toString().isEmpty() ||
+                   eUserEmail.getText().toString().isEmpty() ||
+                   eUserProjects.getText().toString().isEmpty()){
+
+                    verifyEmptyFields();
+
                 }
                 else{
                     //Caso os campos estejam todos preenchidos
@@ -97,15 +118,15 @@ public class UserRegisterActivity extends AppCompatActivity {
         configureNavigationDrawer();
     }
 
-    private boolean verifyEmptyFields(){
-        if(eUserName.getText().toString().isEmpty() ||
-                eUserProjects.getText().toString().isEmpty() ||
-           eUserEmail.getText().toString().isEmpty()){
-
-            return true;
+    private void verifyEmptyFields(){
+        if(eUserName.getText().toString().isEmpty()){
+            enableAndShowErrorName("O campo de nome está vazio");
         }
-        else{
-            return false;
+        if(eUserEmail.getText().toString().isEmpty()){
+            enableAndShowErrorEmail("O campo de e-mail está vazio");
+        }
+        if(eUserProjects.getText().toString().isEmpty()){
+            enableAndShowErrorProjects("O campo de área/projetos está vazio");
         }
     }
 
@@ -114,7 +135,8 @@ public class UserRegisterActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()){
-                    Toast.makeText(getContext(), "Já existe um usuário cadastrado com esse e-mail", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getContext(), "Já existe um usuário cadastrado com esse e-mail", Toast.LENGTH_SHORT).show();
+                    enableAndShowErrorEmail("E-mail já cadastrado");
                 }
                 else{
 
@@ -192,7 +214,7 @@ public class UserRegisterActivity extends AppCompatActivity {
 
         drawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
 
-        Drawable drawable = ResourcesCompat.getDrawable(getResources(), R.mipmap.ic_menu_black, getContext().getTheme());
+        Drawable drawable = ResourcesCompat.getDrawable(getResources(), R.mipmap.ic_menu_white, getContext().getTheme());
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, myToolbar, R.string.open_drawer, R.string.close_drawer);
         toggle.setDrawerIndicatorEnabled(false);
         toggle.setHomeAsUpIndicator(drawable);
@@ -234,6 +256,36 @@ public class UserRegisterActivity extends AppCompatActivity {
                 NavigationDrawerUtils.getNavigationDrawerItemSelectedListener(getContext(),
                         prefs.getInt(ConstantUtils.USER_FIELD_USERTYPE,-1), drawerLayout));
 
+    }
+
+    private void enableAndShowErrorName(String errorMessage){
+        textInputLayoutName.setErrorEnabled(true);
+        textInputLayoutName.setError(errorMessage);
+    }
+
+    private void enableAndShowErrorEmail(String errorMessage){
+        textInputLayoutEmail.setErrorEnabled(true);
+        textInputLayoutEmail.setError(errorMessage);
+    }
+
+    private void enableAndShowErrorProjects(String errorMessage){
+        textInputLayoutProjects.setErrorEnabled(true);
+        textInputLayoutProjects.setError(errorMessage);
+    }
+
+    private void clearErrorName(){
+        textInputLayoutName.setErrorEnabled(false);
+        textInputLayoutName.setError(null);
+    }
+
+    private void clearErrorEmail(){
+        textInputLayoutEmail.setErrorEnabled(false);
+        textInputLayoutEmail.setError(null);
+    }
+
+    private void clearErrorProjects(){
+        textInputLayoutProjects.setErrorEnabled(false);
+        textInputLayoutProjects.setError(null);
     }
 
 }

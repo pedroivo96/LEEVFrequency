@@ -20,13 +20,37 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:weightSum="10"
-            android:orientation="vertical"
-            android:layout_below="@id/toolbar">
+            android:layout_below="@id/toolbar"
+            android:orientation="vertical">
 
-            <ListView
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/lLeevStudents"/>
+                android:layout_height="match_parent"
+                android:weightSum="10"
+                android:orientation="vertical"
+                android:id="@+id/linearLayoutLeevStudents">
+
+                <ListView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/lLeevStudents"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:orientation="vertical"
+                android:layout_weight="0"
+                android:gravity="center"
+                android:id="@+id/linearLayoutNoStudents">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAlignment="center"
+                    android:textSize="@dimen/body1"
+                    android:text="Não existem estudantes cadastrados"/>
+            </LinearLayout>
 
         </LinearLayout>
 

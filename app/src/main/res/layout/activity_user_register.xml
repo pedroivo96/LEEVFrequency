@@ -16,48 +16,106 @@ tools:openDrawer="start">
     <include layout="@layout/toolbar"
         android:id="@+id/toolbar"/>
 
-    <ScrollView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/toolbar">
+        android:layout_below="@id/toolbar"
+        android:orientation="vertical"
+        android:weightSum="5"
+        android:focusableInTouchMode="true"
+        android:padding="@dimen/activity_padding">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:weightSum="10"
-            android:orientation="vertical">
-
-            <EditText
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Digite o nome do usuário"
-                android:id="@+id/eUserName"/>
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Digite o email do usuário"
-                android:id="@+id/eUserEmail"/>
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Digite as áreas ou projeto do usuário"
-                android:id="@+id/eUserProjects"/>
-            <Spinner
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/spinner_background"
-                android:id="@+id/spUserType"/>
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center">
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/textInputLayoutName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:errorTextAppearance="@style/error"
+                    android:theme="@style/TextInputLayoutLabelGrey">
 
-            <Button
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Digite o nome do usuário"
+                        android:textColorHint="@color/primaryTextColorTransparent"
+                        android:id="@+id/eUserName"/>
+
+                </android.support.design.widget.TextInputLayout>
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Registrar"
-                android:id="@+id/bRegisterStudent"/>
+                android:layout_height="0dp"
+                android:layout_weight="1">
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/textInputLayoutEmail"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:errorTextAppearance="@style/error"
+                    android:theme="@style/TextInputLayoutLabelGrey">
 
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Digite o email do usuário"
+                        android:id="@+id/eUserEmail"/>
 
-        </LinearLayout>
+                </android.support.design.widget.TextInputLayout>
+            </LinearLayout>
 
-    </ScrollView>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1">
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/textInputLayoutProjects"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    app:errorTextAppearance="@style/error"
+                    android:theme="@style/TextInputLayoutLabelGrey">
+
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Digite as áreas ou projeto do usuário"
+                        android:id="@+id/eUserProjects"/>
+
+                </android.support.design.widget.TextInputLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1">
+                <Spinner
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/spinner_background"
+                    android:id="@+id/spUserType"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1">
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/rectangular_rounded_filled_secondary_color_selector"
+                    android:textColor="@color/secondaryTextColor"
+                    android:layout_marginBottom="10dp"
+                    android:text="REGISTRAR"
+                    android:id="@+id/bRegisterStudent"/>
+
+            </LinearLayout>
+
+    </LinearLayout>
 
 </RelativeLayout>
 

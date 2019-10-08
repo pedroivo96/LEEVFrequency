@@ -16,8 +16,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -55,6 +57,9 @@ public class MyStudentsActivity extends AppCompatActivity {
 
     private AlertDialog alerta;
 
+    private LinearLayout linearLayoutListMyStudent;
+    private LinearLayout linearLayoutNoStudents;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,6 +70,9 @@ public class MyStudentsActivity extends AppCompatActivity {
         mDatabase = FirebaseDatabase.getInstance().getReference()
                 .child(ConstantUtils.DATABASE_ACTUAL_BRANCH)
                 .child(ConstantUtils.USERS_BRANCH);
+
+        linearLayoutListMyStudent = findViewById(R.id.linearLayoutListMyStudent);
+        linearLayoutNoStudents = findViewById(R.id.linearLayoutNoStudents);
 
         lMyStudents = findViewById(R.id.lMyStudents);
         myStudents = new ArrayList<>();
@@ -97,7 +105,7 @@ public class MyStudentsActivity extends AppCompatActivity {
 
         drawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
 
-        Drawable drawable = ResourcesCompat.getDrawable(getResources(), R.mipmap.ic_menu_black, getContext().getTheme());
+        Drawable drawable = ResourcesCompat.getDrawable(getResources(), R.mipmap.ic_menu_white, getContext().getTheme());
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, myToolbar, R.string.open_drawer, R.string.close_drawer);
         toggle.setDrawerIndicatorEnabled(false);
         toggle.setHomeAsUpIndicator(drawable);
@@ -153,6 +161,9 @@ public class MyStudentsActivity extends AppCompatActivity {
 
                 if(dataSnapshot.exists()){
 
+                    showMyStudentsLayout();
+                    notShowNoStudentsLayout();
+
                     myStudents = new ArrayList<>();
 
                     for(DataSnapshot d: dataSnapshot.getChildren()){
@@ -180,6 +191,10 @@ public class MyStudentsActivity extends AppCompatActivity {
                             return u1.getName().compareTo(u2.getName());
                         }
                     });
+                }
+                else{
+                    notShowMyStudentsLayout();
+                    showNoStudentsLayout();
                 }
             }
 
@@ -335,5 +350,23 @@ public class MyStudentsActivity extends AppCompatActivity {
 
             }
         };
+    }
+
+    private void showMyStudentsLayout(){
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0, 10.0f);
+        linearLayoutListMyStudent.setLayoutParams(params);
+    }
+    private void notShowMyStudentsLayout(){
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0, 0.0f);
+        linearLayoutListMyStudent.setLayoutParams(params);
+    }
+
+    private void showNoStudentsLayout(){
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0, 10.0f);
+        linearLayoutNoStudents.setLayoutParams(params);
+    }
+    private void notShowNoStudentsLayout(){
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0, 0.0f);
+        linearLayoutNoStudents.setLayoutParams(params);
     }
 }

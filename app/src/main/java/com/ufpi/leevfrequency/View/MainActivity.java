@@ -41,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
 
             Intent intent = new Intent(getContext(), UserActivity.class);
             startActivity(intent);
+            finish();
         }
         else{
 
@@ -53,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
                     finish();
                 }
             }, TIME_OUT);
+            finish();
         }
     }
 

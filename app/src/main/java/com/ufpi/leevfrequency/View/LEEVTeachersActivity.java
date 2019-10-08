@@ -13,6 +13,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -46,6 +48,9 @@ public class LEEVTeachersActivity extends AppCompatActivity {
     private ArrayList<User> leevTeachers;
     LeevTeachersAdapter leevTeachersAdapter;
 
+    private LinearLayout linearLayoutLeevTeachers;
+    private LinearLayout linearLayoutNoTeachers;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,13 +68,16 @@ public class LEEVTeachersActivity extends AppCompatActivity {
         leevTeachersAdapter = new LeevTeachersAdapter(leevTeachers, getContext());
         lLeevTeachers.setAdapter(leevTeachersAdapter);
 
+        linearLayoutLeevTeachers = findViewById(R.id.linearLayoutLeevTeachers);
+        linearLayoutNoTeachers = findViewById(R.id.linearLayoutNoTeachers);
+
         //----------------------------Configure NavigationDrawer------------------------------------
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
 
         drawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
 
-        Drawable drawable = ResourcesCompat.getDrawable(getResources(), R.mipmap.ic_menu_black, getContext().getTheme());
+        Drawable drawable = ResourcesCompat.getDrawable(getResources(), R.mipmap.ic_menu_white, getContext().getTheme());
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, myToolbar, R.string.open_drawer, R.string.close_drawer);
         toggle.setDrawerIndicatorEnabled(false);
         toggle.setHomeAsUpIndicator(drawable);
@@ -122,6 +130,10 @@ public class LEEVTeachersActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()){
+
+                    showLeevTeachersLayout();
+                    notShowNoTeachersLayout();
+
                     for(DataSnapshot d: dataSnapshot.getChildren()){
 
                         if((Boolean)d.child(ConstantUtils.USER_FIELD_VISIBLE).getValue()){
@@ -149,6 +161,10 @@ public class LEEVTeachersActivity extends AppCompatActivity {
                     //Verifica se há alterações na lista de estudantes
                     leevTeachersAdapter.notifyDataSetChanged();
                 }
+                else{
+                    showNoTeachersLayout();
+                    notShowLeevTeachersLayout();
+                }
             }
 
             @Override
@@ -160,5 +176,23 @@ public class LEEVTeachersActivity extends AppCompatActivity {
 
     private Context getContext(){
         return this;
+    }
+
+    private void showLeevTeachersLayout(){
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0, 10.0f);
+        linearLayoutLeevTeachers.setLayoutParams(params);
+    }
+    private void notShowLeevTeachersLayout(){
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0, 0.0f);
+        linearLayoutLeevTeachers.setLayoutParams(params);
+    }
+
+    private void showNoTeachersLayout(){
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0, 10.0f);
+        linearLayoutNoTeachers.setLayoutParams(params);
+    }
+    private void notShowNoTeachersLayout(){
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0, 0.0f);
+        linearLayoutNoTeachers.setLayoutParams(params);
     }
 }

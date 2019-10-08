@@ -45,7 +45,8 @@
                     android:id="@+id/textInputLayoutEmail"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:errorTextAppearance="@style/error">
+                    app:errorTextAppearance="@style/error"
+                    android:theme="@style/TextInputLayoutLabelGrey">
 
                     <EditText
                         android:id="@+id/eEmail"
@@ -67,7 +68,8 @@
                     android:id="@+id/textInputLayoutPassword"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:errorTextAppearance="@style/error">
+                    app:errorTextAppearance="@style/error"
+                    android:theme="@style/TextInputLayoutLabelGrey">
 
                     <EditText
                         android:id="@+id/ePassword"
