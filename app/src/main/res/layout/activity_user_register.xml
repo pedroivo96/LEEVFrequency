@@ -9,21 +9,28 @@ android:fitsSystemWindows="true"
 tools:context=".View.UserRegisterActivity"
 tools:openDrawer="start">
 
-<RelativeLayout
+<android.support.design.widget.CoordinatorLayout
+    android:id="@+id/myCoordinatorLayout"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <include layout="@layout/toolbar"
-        android:id="@+id/toolbar"/>
-
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/toolbar"
-        android:orientation="vertical"
-        android:weightSum="5"
-        android:focusableInTouchMode="true"
-        android:padding="@dimen/activity_padding">
+        android:layout_height="match_parent">
+
+        <include layout="@layout/toolbar"
+            android:id="@+id/toolbar"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/toolbar"
+            android:orientation="vertical"
+            android:weightSum="5"
+            android:focusableInTouchMode="true"
+            android:padding="@dimen/activity_padding">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -115,9 +122,12 @@ tools:openDrawer="start">
 
             </LinearLayout>
 
-    </LinearLayout>
+        </LinearLayout>
 
-</RelativeLayout>
+
+    </RelativeLayout>
+
+</android.support.design.widget.CoordinatorLayout>
 
 <android.support.design.widget.NavigationView
     android:id="@+id/navView"

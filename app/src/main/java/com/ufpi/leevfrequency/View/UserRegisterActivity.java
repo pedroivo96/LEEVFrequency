@@ -4,7 +4,9 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v4.view.GravityCompat;
@@ -60,10 +62,13 @@ public class UserRegisterActivity extends AppCompatActivity {
     private TextInputLayout textInputLayoutEmail;
     private TextInputLayout textInputLayoutProjects;
 
+    private CoordinatorLayout myCoordinatorLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_register);
+
+        myCoordinatorLayout = findViewById(R.id.myCoordinatorLayout);
 
         eUserName = findViewById(R.id.eUserName);
         eUserProjects = findViewById(R.id.eUserProjects);
@@ -174,7 +179,8 @@ public class UserRegisterActivity extends AppCompatActivity {
         mDatabase.child(id).child(ConstantUtils.USER_FIELD_REGISTERFINALIZED).setValue(user.getRegisterFinalized());
         mDatabase.child(id).child(ConstantUtils.USER_FIELD_IDADVISOR).setValue(user.getIdAdvisor());
 
-        Toast.makeText(getContext(), "Pré-cadastro de"+user.getName()+"foi realizado", Toast.LENGTH_SHORT).show();
+        simplySnackbar("Pré-cadastro de "+user.getName()+" foi realizado");
+        //Toast.makeText(getContext(), "Pré-cadastro de"+user.getName()+" foi realizado", Toast.LENGTH_SHORT).show();
     }
 
     private Context getContext(){
@@ -286,6 +292,13 @@ public class UserRegisterActivity extends AppCompatActivity {
     private void clearErrorProjects(){
         textInputLayoutProjects.setErrorEnabled(false);
         textInputLayoutProjects.setError(null);
+    }
+
+    public void simplySnackbar(String message){
+
+        Snackbar snackbar = Snackbar.make(myCoordinatorLayout,message, Snackbar.LENGTH_LONG);
+        snackbar.show();
+
     }
 
 }

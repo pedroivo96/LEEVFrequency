@@ -55,6 +55,9 @@ public class LEEVStudentsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_leevstudents);
 
+        linearLayoutLeevStudents = findViewById(R.id.linearLayoutLeevStudents);
+        linearLayoutNoStudents = findViewById(R.id.linearLayoutNoStudents);
+
         prefs = getSharedPreferences("com.ufpi.leevfrequency", MODE_PRIVATE);
 
         mDatabase = FirebaseDatabase.getInstance().getReference()

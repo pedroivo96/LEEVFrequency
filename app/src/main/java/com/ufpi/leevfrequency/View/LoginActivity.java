@@ -26,9 +26,13 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 import com.ufpi.leevfrequency.R;
 import com.ufpi.leevfrequency.Utils.ConstantUtils;
 import com.ufpi.leevfrequency.Utils.MethodUtils;
+
+import java.util.HashMap;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -160,7 +164,7 @@ public class LoginActivity extends AppCompatActivity {
 
                                     //Iremos salvar nas preferences apenas email e id
                                     String email = (String) d.child(ConstantUtils.USER_FIELD_EMAIL).getValue();
-                                    String id = d.getKey();
+                                    final String id = d.getKey();
                                     String name = (String) d.child(ConstantUtils.USER_FIELD_NAME).getValue();
                                     int userType = d.child(ConstantUtils.USER_FIELD_USERTYPE).getValue(Integer.class);
 
@@ -170,8 +174,29 @@ public class LoginActivity extends AppCompatActivity {
                                     prefs.edit().putString(ConstantUtils.USER_FIELD_ID, id).commit();
                                     prefs.edit().putInt(ConstantUtils.USER_FIELD_USERTYPE, userType).commit();
 
-                                    Intent intent = new Intent(getContext(), UserActivity.class);
-                                    startActivity(intent);
+                                    String instanceId;
+                                    FirebaseInstanceId.getInstance().getInstanceId()
+                                            .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                                                    if (!task.isSuccessful()) {
+                                                        Log.i("TAG", "getInstanceId failed", task.getException());
+                                                        return;
+                                                    }
+
+                                                    // Get new Instance ID token
+                                                    String token = task.getResult().getToken();
+
+                                                    HashMap<String, Object> result = new HashMap<>();
+                                                    result.put(ConstantUtils.USER_FIELD_INSTANCE_ID, token);
+
+                                                    mDatabase.child(id).updateChildren(result);
+
+                                                    Intent intent = new Intent(getContext(), UserActivity.class);
+                                                    startActivity(intent);
+                                                }
+                                            });
+
                                 }
                             }
                         }
