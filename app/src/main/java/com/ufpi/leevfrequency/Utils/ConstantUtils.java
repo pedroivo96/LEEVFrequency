@@ -21,7 +21,8 @@ public class ConstantUtils {
     public static final String USER_FIELD_REGISTERFINALIZED = "isRegisterFinalized";
     public static final String USER_FIELD_VISIBLE = "isVisible";
     public static final String USER_FIELD_IDADVISOR = "idAdvisor";
-    public static final String USER_FIELD_INSTANCE_ID = "idInstance";
+    public static final String USER_FIELD_ID_INSTANCE_FREQUENCY = "idInstanceFrequency";
+    public static final String USER_FIELD_ID_INSTANCE_FORMS = "idInstanceForms";
 
     public static final String FREQUENCY_FIELD_DATE = "date";
 

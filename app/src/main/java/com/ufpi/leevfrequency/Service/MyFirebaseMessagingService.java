@@ -48,7 +48,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                             String userId = prefs.getString(ConstantUtils.USER_FIELD_ID, "");
 
                             HashMap<String, Object> result = new HashMap<>();
-                            result.put(ConstantUtils.USER_FIELD_INSTANCE_ID, firebaseToken);
+                            result.put(ConstantUtils.USER_FIELD_ID_INSTANCE_FREQUENCY, firebaseToken);
 
 
                             FirebaseDatabase.getInstance().getReference()

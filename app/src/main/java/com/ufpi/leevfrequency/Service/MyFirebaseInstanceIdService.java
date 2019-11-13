@@ -25,12 +25,12 @@ public class MyFirebaseInstanceIdService extends FirebaseInstanceIdService {
         */
 
         SharedPreferences prefs = prefs = getSharedPreferences("com.ufpi.leevfrequency", MODE_PRIVATE);
-        if(prefs.getString(ConstantUtils.USER_FIELD_INSTANCE_ID, "").length() > 0){
+        if(prefs.getString(ConstantUtils.USER_FIELD_ID_INSTANCE_FREQUENCY, "").length() > 0){
 
             String userId = prefs.getString(ConstantUtils.USER_FIELD_ID, "");
 
             HashMap<String, Object> result = new HashMap<>();
-            result.put(ConstantUtils.USER_FIELD_INSTANCE_ID, firebaseToken);
+            result.put(ConstantUtils.USER_FIELD_ID_INSTANCE_FREQUENCY, firebaseToken);
 
 
             FirebaseDatabase.getInstance().getReference()

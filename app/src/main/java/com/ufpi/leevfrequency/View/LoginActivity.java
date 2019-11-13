@@ -188,7 +188,7 @@ public class LoginActivity extends AppCompatActivity {
                                                     String token = task.getResult().getToken();
 
                                                     HashMap<String, Object> result = new HashMap<>();
-                                                    result.put(ConstantUtils.USER_FIELD_INSTANCE_ID, token);
+                                                    result.put(ConstantUtils.USER_FIELD_ID_INSTANCE_FREQUENCY, token);
 
                                                     mDatabase.child(id).updateChildren(result);
 
