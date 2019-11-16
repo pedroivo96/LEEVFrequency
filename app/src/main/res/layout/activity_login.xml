@@ -77,6 +77,7 @@
                         android:layout_height="wrap_content"
                         android:hint="Senha"
                         android:theme="@style/EditTextTheme"
+                        android:inputType="textPassword"
                         android:drawableLeft="@mipmap/ic_lock_outlined_black"/>
 
                 </android.support.design.widget.TextInputLayout>

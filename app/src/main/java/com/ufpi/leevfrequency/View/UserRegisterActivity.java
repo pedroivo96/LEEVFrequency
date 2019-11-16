@@ -180,6 +180,10 @@ public class UserRegisterActivity extends AppCompatActivity {
         mDatabase.child(id).child(ConstantUtils.USER_FIELD_IDADVISOR).setValue(user.getIdAdvisor());
 
         simplySnackbar("Pré-cadastro de "+user.getName()+" foi realizado");
+
+        eUserName.setText("");
+        eUserEmail.setText("");
+        eUserProjects.setText("");
         //Toast.makeText(getContext(), "Pré-cadastro de"+user.getName()+" foi realizado", Toast.LENGTH_SHORT).show();
     }
 

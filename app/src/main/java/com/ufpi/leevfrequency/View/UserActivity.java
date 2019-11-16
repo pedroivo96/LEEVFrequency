@@ -2,10 +2,12 @@ package com.ufpi.leevfrequency.View;
 
 import android.Manifest;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -28,6 +30,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.support.v7.widget.Toolbar;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -85,6 +88,8 @@ public class UserActivity extends AppCompatActivity {
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1234;
     private Boolean mLocationPermissionsGranted = false;
 
+    private Dialog mDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -105,7 +110,6 @@ public class UserActivity extends AppCompatActivity {
         tUserName = findViewById(R.id.tUserName);
         tUserEmail = findViewById(R.id.tUserEmail);
         tUserProjects = findViewById(R.id.tUserProjects);
-        bAddNewFrequency = findViewById(R.id.bAddNewFrequency);
         calendarUserFrequencies = findViewById(R.id.calendarUserFrequencies);
 
         calendarUserFrequencies.setSelectionMode(MaterialCalendarView.SELECTION_MODE_NONE);
@@ -120,25 +124,6 @@ public class UserActivity extends AppCompatActivity {
             getLocationPermission();
 
             getUserFrequencies();
-
-            /*
-            bAddNewFrequency.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    DatabaseReference elementReference = mDatabaseFrequencies
-                            .child(prefs.getString(ConstantUtils.USER_FIELD_ID,""))
-                            .push();
-                    String id = elementReference.getKey();
-
-                    mDatabaseFrequencies
-                            .child(prefs.getString(ConstantUtils.USER_FIELD_ID,""))
-                            .child(id)
-                            .child(ConstantUtils.FREQUENCY_FIELD_DATE)
-                            .setValue(Calendar.getInstance().getTime().getTime());
-                }
-            });
-            */
-
         }
         else{
             //Caso seja professor
@@ -150,6 +135,8 @@ public class UserActivity extends AppCompatActivity {
         }
 
         configureNavigationDrawer();
+
+        openDialog();
 
         //Busca as informação do usuário logado para exibí-las nessa tela
         mDatabaseUsers
@@ -220,10 +207,13 @@ public class UserActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()){
                     for(DataSnapshot d : dataSnapshot.getChildren()){
+
                         tUserId.setText(d.getKey());
                         tUserName.setText((String) d.child(ConstantUtils.USER_FIELD_NAME).getValue());
                         tUserEmail.setText((String) d.child(ConstantUtils.USER_FIELD_EMAIL).getValue());
                         tUserProjects.setText((String) d.child(ConstantUtils.USER_FIELD_PROJECTS).getValue());
+
+                        closeDialog();
                     }
                 }
             }
@@ -473,8 +463,7 @@ public class UserActivity extends AppCompatActivity {
 
                 /*Adiciona ao CalendarView um EventDecorator que permite posicionar um ponto embaixo
                 * das datas contidas na lista calendarDays */
-                calendarUserFrequencies.addDecorator(new EventDecorator(R.color.colorAccent, calendarDays));
-
+                calendarUserFrequencies.addDecorator(new EventDecorator(getContext(), calendarDays));
             }
 
             @Override
@@ -547,5 +536,25 @@ public class UserActivity extends AppCompatActivity {
         mDatabaseUsers
                 .child(prefs.getString(ConstantUtils.USER_FIELD_ID,""))
                 .updateChildren(result);
+    }
+
+    public void openDialog(){
+        mDialog = new Dialog(this);
+        //vamos remover o titulo da Dialog
+        mDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        //vamos carregar o xml personalizado
+        mDialog.setContentView(R.layout.progressbar_dialog);
+        //DEixamos transparente
+        mDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        // não permitimos fechar esta dialog
+        mDialog.setCancelable(false);
+        //temos a instancia do ProgressBar!
+        //final ProgressBar progressBar = ProgressBar.class.cast(mDialog.findViewById(R.id.progressBar));
+
+        mDialog.show();
+    }
+
+    private void closeDialog(){
+        mDialog.dismiss();
     }
 }

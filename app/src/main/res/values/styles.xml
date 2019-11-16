@@ -49,4 +49,8 @@
         <item name="colorControlActivated">@color/primaryTextColor</item>
     </style>
 
+    <style name="CustomTextAppearance" parent="TextAppearance.MaterialCalendarWidget.Date">
+        <item name="android:textColor">@color/primaryTextColor</item>
+    </style>
+
 </resources>

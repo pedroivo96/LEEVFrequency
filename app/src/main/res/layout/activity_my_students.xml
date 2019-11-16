@@ -21,7 +21,8 @@
             android:layout_height="match_parent"
             android:orientation="vertical"
             android:weightSum="10"
-            android:layout_below="@id/toolbar">
+            android:layout_below="@id/toolbar"
+            android:padding="@dimen/activity_padding">
 
             <LinearLayout
                 android:layout_width="match_parent"

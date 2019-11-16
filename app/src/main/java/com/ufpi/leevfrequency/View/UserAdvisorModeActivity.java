@@ -45,7 +45,6 @@ public class UserAdvisorModeActivity extends AppCompatActivity {
     private TextView tUserName;
     private TextView tUserEmail;
     private TextView tUserProjects;
-    private Button bAddNewFrequency;
     private MaterialCalendarView calendarUserFrequencies;
 
     private ArrayList<Frequency> userFrequencies;
@@ -79,7 +78,6 @@ public class UserAdvisorModeActivity extends AppCompatActivity {
         tUserName = findViewById(R.id.tUserName);
         tUserEmail = findViewById(R.id.tUserEmail);
         tUserProjects = findViewById(R.id.tUserProjects);
-        bAddNewFrequency = findViewById(R.id.bAddNewFrequency);
         calendarUserFrequencies = findViewById(R.id.calendarUserFrequencies);
 
         calendarUserFrequencies.setSelectionMode(MaterialCalendarView.SELECTION_MODE_NONE);
@@ -107,7 +105,7 @@ public class UserAdvisorModeActivity extends AppCompatActivity {
 
         drawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
 
-        Drawable drawable = ResourcesCompat.getDrawable(getResources(), R.mipmap.ic_menu_black, getContext().getTheme());
+        Drawable drawable = ResourcesCompat.getDrawable(getResources(), R.mipmap.ic_menu_white, getContext().getTheme());
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, myToolbar, R.string.open_drawer, R.string.close_drawer);
         toggle.setDrawerIndicatorEnabled(false);
         toggle.setHomeAsUpIndicator(drawable);
@@ -219,7 +217,7 @@ public class UserAdvisorModeActivity extends AppCompatActivity {
 
                 /*Adiciona ao CalendarView um EventDecorator que permite posicionar um ponto embaixo
                  * das datas contidas na lista calendarDays */
-                calendarUserFrequencies.addDecorator(new EventDecorator(R.color.colorAccent, calendarDays));
+                calendarUserFrequencies.addDecorator(new EventDecorator(getContext(), calendarDays));
 
             }
 

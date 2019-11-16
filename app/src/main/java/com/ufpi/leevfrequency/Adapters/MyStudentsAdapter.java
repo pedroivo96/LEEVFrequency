@@ -50,7 +50,7 @@ public class MyStudentsAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View view1 = inflater.inflate(R.layout.students_with_remove_item_listview, parent, false);
+        View view1 = inflater.inflate(R.layout.students_without_remove_item_listview, parent, false);
 
         final User student = myStudents.get(position);
 
