@@ -16,17 +16,21 @@
         <include layout="@layout/toolbar"
             android:id="@+id/toolbar"/>
 
-        <ScrollView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@id/toolbar">
+            android:weightSum="10"
+            android:orientation="vertical"
+            android:padding="@dimen/activity_padding"
+            android:layout_below="@id/toolbar"
+            android:background="@color/backgroundColor">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:weightSum="10"
+                android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="@dimen/activity_padding">
+                android:background="@color/surfaceColor"
+                android:padding="10dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -112,12 +116,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/calendarUserFrequencies"
-                    app:mcv_showOtherDates="all"
-                    app:mcv_selectionColor="#00F"
+                    app:mcv_showOtherDates="none"
+                    app:mcv_selectionColor="@color/primaryDarkColor"
                     app:mcv_dateTextAppearance="@style/CustomTextAppearance"/>
+
             </LinearLayout>
 
-        </ScrollView>
+        </LinearLayout>
 
     </RelativeLayout>
 

@@ -22,6 +22,7 @@
             android:orientation="vertical"
             android:weightSum="10"
             android:layout_below="@id/toolbar"
+            android:background="@color/backgroundColor"
             android:padding="@dimen/activity_padding">
 
             <LinearLayout
@@ -34,6 +35,7 @@
                 <ListView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:divider="@null"
                     android:id="@+id/lMyStudents"/>
 
             </LinearLayout>

@@ -62,7 +62,7 @@ import com.prolificinteractive.materialcalendarview.CalendarDay;
 
 public class UserActivity extends AppCompatActivity {
 
-    private static final String networkName = "PEDRO";
+    private static final String networkName = "Pedro";
 
     //------------------------- NavigationDrawer---------------------------------------------------
     private Toolbar toolbar;

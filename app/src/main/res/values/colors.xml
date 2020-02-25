@@ -16,6 +16,9 @@
 
     <color name="primaryTextColorTransparent">#80000000</color>
 
+    <color name="backgroundColor">#cbcccc</color>
+    <color name="surfaceColor">#FFFFFF</color>
+
     <color name="transparent">#000000FF</color>
 
     <color name="errorColor">#ff0000</color>

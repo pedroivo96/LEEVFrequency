@@ -13,7 +13,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.ufpi.leevfrequency.R;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements Runnable {
 
     private ImageView appIcon;
     private final int TIME_OUT = 2000;
@@ -27,10 +27,12 @@ public class MainActivity extends AppCompatActivity {
         appIcon = findViewById(R.id.appIcon);
         mAuth = FirebaseAuth.getInstance();
 
+
         Glide
                 .with(getContext())
                 .load(getResources().getDrawable(R.drawable.leev_icon))
                 .into(appIcon);
+
 
         //Verifica se há um usuário logado
         FirebaseUser currentUser = mAuth.getCurrentUser();
@@ -39,9 +41,20 @@ public class MainActivity extends AppCompatActivity {
             //Há um usuário logado
             Log.i("TAG", currentUser.getEmail());
 
+            /*
             Intent intent = new Intent(getContext(), UserActivity.class);
             startActivity(intent);
             finish();
+            */
+
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    Intent start = new Intent(getContext(), UserActivity.class);
+                    startActivity(start);
+                    finish();
+                }
+            }, TIME_OUT);
         }
         else{
 
@@ -54,11 +67,16 @@ public class MainActivity extends AppCompatActivity {
                     finish();
                 }
             }, TIME_OUT);
-            finish();
         }
     }
 
     private Context getContext(){
         return this;
+    }
+
+    @Override
+    public void run() {
+        startActivity(new Intent(this, LoginActivity.class));
+        finish();
     }
 }

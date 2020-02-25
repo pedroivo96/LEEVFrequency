@@ -21,35 +21,45 @@
             android:layout_height="match_parent"
             android:weightSum="10"
             android:layout_below="@id/toolbar"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:background="@color/backgroundColor"
+            android:padding="10dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:weightSum="10"
-                android:orientation="vertical"
-                android:id="@+id/linearLayoutLeevStudents">
+                android:orientation="vertical">
 
-                <ListView
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/lLeevStudents"/>
+                    android:layout_height="match_parent"
+                    android:weightSum="10"
+                    android:orientation="vertical"
+                    android:id="@+id/linearLayoutLeevStudents">
 
-            </LinearLayout>
+                    <ListView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/lLeevStudents"
+                        android:divider="@null"/>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:orientation="vertical"
-                android:layout_weight="0"
-                android:gravity="center"
-                android:id="@+id/linearLayoutNoStudents">
-                <TextView
+                </LinearLayout>
+
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textAlignment="center"
-                    android:textSize="@dimen/body1"
-                    android:text="Não existem estudantes cadastrados"/>
+                    android:layout_height="0dp"
+                    android:orientation="vertical"
+                    android:layout_weight="0"
+                    android:gravity="center"
+                    android:id="@+id/linearLayoutNoStudents">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textAlignment="center"
+                        android:textSize="@dimen/body1"
+                        android:text="Não existem estudantes cadastrados"/>
+                </LinearLayout>
+
             </LinearLayout>
 
         </LinearLayout>

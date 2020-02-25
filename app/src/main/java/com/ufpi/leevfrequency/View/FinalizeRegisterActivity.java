@@ -3,6 +3,7 @@ package com.ufpi.leevfrequency.View;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -41,6 +42,10 @@ public class FinalizeRegisterActivity extends AppCompatActivity {
     private DatabaseReference mDatabase;
     private SharedPreferences prefs = null;
 
+    private TextInputLayout textInputLayoutEmail;
+    private TextInputLayout textInputLayoutPassword;
+    private TextInputLayout textInputLayoutPasswordAgain;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,25 +62,34 @@ public class FinalizeRegisterActivity extends AppCompatActivity {
         ePasswordAgain = findViewById(R.id.ePasswordAgain);
         bFinalizeRegister = findViewById(R.id.bFinalizeRegister);
 
+        textInputLayoutEmail = findViewById(R.id.textInputLayoutEmail);
+        textInputLayoutPassword = findViewById(R.id.textInputLayoutPassword);
+        textInputLayoutPasswordAgain = findViewById(R.id.textInputLayoutPasswordAgain);
+
         bFinalizeRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
+                clearErrorEmail();
+                clearErrorPassword();
+                clearErrorPasswordAgain();
+
                 /* Verificar se algum dos campos está vazio */
                 if(verifyEmptyFields()){
-                    Toast.makeText(getContext(), "Nenhum dos campos pode estar vazio", Toast.LENGTH_SHORT).show();
+                    checkEmptyFields();
                 }
                 else{
 
                     /* Verificar se o campo de email possui o formato apropriado */
                     if(!MethodUtils.isEmailValid(eEmail.getText().toString())){
-                        Toast.makeText(getContext(), "O e-mail não possui um formato válido", Toast.LENGTH_SHORT).show();
+                        enableAndShowErrorEmail("O e-mail não está em um formato válido");
                     }
                     else{
 
                         /* Verificar se as senhas coincidem */
                         if(!ePassword.getText().toString().equals(ePasswordAgain.getText().toString())){
-                            Toast.makeText(getContext(), "As senhas não coincidem", Toast.LENGTH_SHORT).show();
+                            enableAndShowErrorPassword("As senhas não coincidem");
+                            enableAndShowErrorPasswordAgain("As senhas não coincidem");
                         }
                         else{
                             mDatabase
@@ -109,6 +123,9 @@ public class FinalizeRegisterActivity extends AppCompatActivity {
                                                 }
 
                                                 insertAndLoginUser();
+                                            }
+                                            else{
+                                                Toast.makeText(getContext(), "Usuário não cadastrado", Toast.LENGTH_SHORT).show();
                                             }
                                         }
 
@@ -189,12 +206,16 @@ public class FinalizeRegisterActivity extends AppCompatActivity {
                     switch (errorCode){
                         case "ERROR_INVALID_EMAIL":
                             Toast.makeText(getContext(), "E-mail em formato inválido", Toast.LENGTH_SHORT).show();
+                            //enableAndShowErrorEmail("E-mail em formato inválido");
                             break;
                         case "ERROR_WEAK_PASSWORD":
                             Toast.makeText(getContext(), "Senha fraca. Deve ter, no mínimo, 6 caracteres", Toast.LENGTH_SHORT).show();
+                            //enableAndShowErrorPassword("Senha fraca. Deve ter, no mínimo, 6 caracteres");
+                            //enableAndShowErrorPasswordAgain("Senha fraca. Deve ter, no mínimo, 6 caracteres");
                             break;
                         case "ERROR_EMAIL_ALREADY_IN_USE":
                             Toast.makeText(getContext(), "E-mail já está em uso", Toast.LENGTH_SHORT).show();
+                            //enableAndShowErrorEmail("E-mail já está em uso");
                             break;
                     }
                 }
@@ -215,7 +236,49 @@ public class FinalizeRegisterActivity extends AppCompatActivity {
         }
     }
 
+    private void checkEmptyFields(){
+
+        String fieldNotEmpty = "Este campo não pode estar vazio";
+
+        if(eEmail.getText().toString().isEmpty()){
+            enableAndShowErrorEmail(fieldNotEmpty);
+        }
+        if(ePassword.getText().toString().isEmpty()){
+            enableAndShowErrorPassword(fieldNotEmpty);
+        }
+        if(ePasswordAgain.getText().toString().isEmpty()){
+            enableAndShowErrorPasswordAgain(fieldNotEmpty);
+        }
+    }
+
     private Context getContext(){
         return this;
+    }
+
+    private void enableAndShowErrorEmail(String errorMessage){
+        textInputLayoutEmail.setErrorEnabled(true);
+        textInputLayoutEmail.setError(errorMessage);
+    }
+    private void clearErrorEmail(){
+        textInputLayoutEmail.setErrorEnabled(false);
+        textInputLayoutEmail.setError(null);
+    }
+
+    private void enableAndShowErrorPassword(String errorMessage){
+        textInputLayoutPassword.setErrorEnabled(true);
+        textInputLayoutPassword.setError(errorMessage);
+    }
+    private void clearErrorPassword(){
+        textInputLayoutPassword.setErrorEnabled(false);
+        textInputLayoutPassword.setError(null);
+    }
+
+    private void enableAndShowErrorPasswordAgain(String errorMessage){
+        textInputLayoutPasswordAgain.setErrorEnabled(true);
+        textInputLayoutPasswordAgain.setError(errorMessage);
+    }
+    private void clearErrorPasswordAgain(){
+        textInputLayoutPasswordAgain.setErrorEnabled(false);
+        textInputLayoutPasswordAgain.setError(null);
     }
 }

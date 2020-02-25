@@ -45,7 +45,7 @@ public class LoginActivity extends AppCompatActivity {
     private Button bLogin;
     private Button bForgetPassword;
     private Button bFinalizeRegister;
-    private Button bInsertTest;
+    //private Button bInsertTest;
 
     private FirebaseAuth mAuth;
 
@@ -72,7 +72,7 @@ public class LoginActivity extends AppCompatActivity {
         bLogin = findViewById(R.id.bLogin);
         bForgetPassword = findViewById(R.id.bForgetPassword);
         bFinalizeRegister = findViewById(R.id.bFinalizeRegister);
-        bInsertTest = findViewById(R.id.bInsertTest);
+        //bInsertTest = findViewById(R.id.bInsertTest);
 
         bLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -123,6 +123,7 @@ public class LoginActivity extends AppCompatActivity {
         });
 
 
+        /*
         bInsertTest.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -139,7 +140,7 @@ public class LoginActivity extends AppCompatActivity {
                 mDatabase.child(id).child(ConstantUtils.USER_FIELD_IDADVISOR).setValue("Sem orientador");
             }
         });
-
+        */
     }
 
     private Context getContext(){

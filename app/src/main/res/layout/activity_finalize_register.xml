@@ -5,30 +5,70 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".View.FinalizeRegisterActivity">
+    tools:context=".View.FinalizeRegisterActivity"
+    android:gravity="center"
+    android:padding="@dimen/activity_padding">
 
-    <EditText
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/textInputLayoutEmail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Digite seu e-mail"
-        android:id="@+id/eEmail"/>
+        app:errorTextAppearance="@style/error"
+        android:theme="@style/TextInputLayoutLabelGrey">
 
-    <EditText
+        <EditText
+            android:id="@+id/eEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="E-mail"
+            android:theme="@style/EditTextTheme"
+            android:inputType="textEmailAddress"
+            android:drawableLeft="@mipmap/ic_mail_outlined_black"/>
+
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/textInputLayoutPassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Digite sua senha"
-        android:id="@+id/ePassword"/>
+        app:errorTextAppearance="@style/error"
+        android:theme="@style/TextInputLayoutLabelGrey">
 
-    <EditText
+        <EditText
+            android:id="@+id/ePassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Digite sua senha"
+            android:theme="@style/EditTextTheme"
+            android:inputType="textEmailAddress"
+            android:drawableLeft="@mipmap/ic_lock_outlined_black"/>
+
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/textInputLayoutPasswordAgain"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Digite sua senha novamente"
-        android:id="@+id/ePasswordAgain"/>
+        app:errorTextAppearance="@style/error"
+        android:theme="@style/TextInputLayoutLabelGrey">
+
+        <EditText
+            android:id="@+id/ePasswordAgain"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Digite sua senha novamente"
+            android:theme="@style/EditTextTheme"
+            android:inputType="textEmailAddress"
+            android:drawableLeft="@mipmap/ic_lock_outlined_black"/>
+
+    </android.support.design.widget.TextInputLayout>
 
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Finalizar registro"
-        android:id="@+id/bFinalizeRegister"/>
+        android:id="@+id/bFinalizeRegister"
+        android:background="@drawable/rectangular_rounded_filled_secondary_color_selector"
+        android:textColor="@color/secondaryTextColor"/>
 
 </LinearLayout>

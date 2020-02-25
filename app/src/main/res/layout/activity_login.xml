@@ -129,6 +129,7 @@
                         android:id="@+id/bFinalizeRegister"/>
                 </LinearLayout>
 
+                <!--
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
@@ -139,6 +140,7 @@
                         android:text="Inserir teste"
                         android:id="@+id/bInsertTest"/>
                 </LinearLayout>
+                -->
 
             </LinearLayout>
 
