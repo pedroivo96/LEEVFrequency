@@ -391,7 +391,6 @@ public class UserActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()){
                     //Já existe um registro de frequência nesse dia
-
                     Log.i("TAG", "O usuário atualmente logado já possui um registro de frequência hoje");
                 }
                 else{

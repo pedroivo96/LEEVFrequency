@@ -99,9 +99,6 @@ public class NavigationDrawerUtils {
                             }
                             break;
                         }
-                        case R.id.nav_see_advisor:{
-                            break;
-                        }
                         case R.id.nav_leev_teachers:{
 
                             Intent intent = new Intent(context, LEEVTeachersActivity.class);
